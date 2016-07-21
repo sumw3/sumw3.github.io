@@ -11,24 +11,31 @@
   
   <meta name="keywords" content="hexo,Travis CI">
   <meta name="description" content="开始之前在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 .travis.yml 的话，请先制作一个新的 .travis.yml 。
-Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。1$ ssh-keygen -t rsa -C &amp;qu">
+Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。
+1$ ssh-keygen -t rsa -C &amp;q">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用 Travis CI 自动部署 Hexo">
 <meta property="og:url" content="http://sumw3.com/2016/07/ciqvw2yns000078lsc46sc6lt/index.html">
 <meta property="og:site_name" content="Σ">
 <meta property="og:description" content="开始之前在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 .travis.yml 的话，请先制作一个新的 .travis.yml 。
-Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。1$ ssh-keygen -t rsa -C &amp;qu">
+Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。
+1$ ssh-keygen -t rsa -C &amp;q">
 <meta property="og:image" content="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png">
-<meta property="og:updated_time" content="2016-07-21T05:31:34.123Z">
+<meta property="og:updated_time" content="2016-07-21T05:48:53.699Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用 Travis CI 自动部署 Hexo">
 <meta name="twitter:description" content="开始之前在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 .travis.yml 的话，请先制作一个新的 .travis.yml 。
-Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。1$ ssh-keygen -t rsa -C &amp;qu">
+Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。
+1$ ssh-keygen -t rsa -C &amp;q">
 <meta name="twitter:image" content="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png">
   
     <link rel="alternative" href="/atom.xml" title="Σ" type="application/atom+xml">
   
-  <meta name="summary" content="Avoid evil and do good! Seek peace and pursue it!">
+  <meta name="summary" content="&lt;h2 id=&quot;开始之前&quot;&gt;&lt;a href=&quot;#开始之前&quot; class=&quot;headerlink&quot; title=&quot;开始之前&quot;&gt;&lt;/a&gt;开始之前&lt;/h2&gt;&lt;p&gt;在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 &lt;code&gt;.travis.yml&lt;/code&gt; 的话，请先制作一个新的 &lt;code&gt;.travis.yml&lt;/code&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;Deploy-Key&quot;&gt;&lt;a href=&quot;#Deploy-Key&quot; class=&quot;headerlink&quot; title=&quot;Deploy Key&quot;&gt;&lt;/a&gt;Deploy Key&lt;/h2&gt;&lt;p&gt;首先你必须用 &lt;code&gt;ssh-keygen&lt;/code&gt; 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;$ ssh-keygen -t rsa -C &amp;quot;your_email@example.com&amp;quot;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;在制作 SSH key 时，请把 passphrase 留空，因为在 Travis 上输入密码很麻烦，我目前还找不到比较简便的方式，如果各位知道的话欢迎提供给我。&lt;br&gt;当 SSH key 制作完成后，复制 Public key 到GitHub上的 Deploy key 字段，如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;">
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -179,7 +186,7 @@ Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当�
 
             
             <nav class="post-toc-wrap" id="post-toc">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#开始之前"><span class="post-toc-text">开始之前</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Deploy-Key"><span class="post-toc-text">Deploy Key</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#加密-Private-Key"><span class="post-toc-text">加密 Private Key</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Decrypt-the-private-key"><span class="post-toc-text">Decrypt the private key</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Set-the-permission-of-the-key"><span class="post-toc-text">Set the permission of the key</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Start-SSH-agent"><span class="post-toc-text">Start SSH agent</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Add-the-private-key-to-the-system"><span class="post-toc-text">Add the private key to the system</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Copy-SSH-config"><span class="post-toc-text">Copy SSH config</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Set-Git-config"><span class="post-toc-text">Set Git config</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Install-Hexo"><span class="post-toc-text">Install Hexo</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Clone-the-repository"><span class="post-toc-text">Clone the repository</span></a>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#开始之前"><span class="post-toc-text">开始之前</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Deploy-Key"><span class="post-toc-text">Deploy Key</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#加密-Private-Key"><span class="post-toc-text">加密 Private Key</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#设定-travis-yml"><span class="post-toc-text">设定 .travis.yml</span></a></li></ol>
             </nav>
             
         </aside>
@@ -188,64 +195,34 @@ Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当�
 
             <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 <code>.travis.yml</code> 的话，请先制作一个新的 <code>.travis.yml</code> 。</p>
-<h2 id="Deploy-Key"><a href="#Deploy-Key" class="headerlink" title="Deploy Key"></a>Deploy Key</h2><p>首先你必须用 <code>ssh-keygen</code> 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</div></pre></td></tr></table></figure></p>
+<h2 id="Deploy-Key"><a href="#Deploy-Key" class="headerlink" title="Deploy Key"></a>Deploy Key</h2><p>首先你必须用 <code>ssh-keygen</code> 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</div></pre></td></tr></table></figure>
 <p>在制作 SSH key 时，请把 passphrase 留空，因为在 Travis 上输入密码很麻烦，我目前还找不到比较简便的方式，如果各位知道的话欢迎提供给我。<br>当 SSH key 制作完成后，复制 Public key 到GitHub上的 Deploy key 字段，如下：</p>
 <p><img src="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png" alt=""></p>
+<a id="more"></a>
 <h2 id="加密-Private-Key"><a href="#加密-Private-Key" class="headerlink" title="加密 Private Key"></a>加密 Private Key</h2><p>首先，安装 Travis 的命令列工具：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gem install travis</div></pre></td></tr></table></figure>
 <p>在安装完毕后，透过命令列工具登入到 Travis ：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis login --auto</div></pre></td></tr></table></figure>
 <p>如此一来，我们就能透过 Travis 提供的命令列工具加密刚刚所制作的 Private key ，并把它上传到 Travis 上供日后使用。</p>
-<p>假设 Private key 的档案名称为 <figure class="highlight plain"><figcaption><span>会加密并产生 ```ssh_key.enc``` ，并自动在 ```.travis.yml``` 的 ```before_install``` 字段中，自动插入解密指令。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
-<p>$ travis encrypt-file ssh_key –add<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">正常来说 Travis 会自动解析目前的 repo 并把 Private key 上传到相对应的 repo ，但有时可能会秀逗，这时你必须在指令后加上 ```-r``` 选项来指定 repo 名称，例如：</div></pre></td></tr></table></figure></p>
-<p>$ travis encrypt-file ssh_key –add -r hexojs/site<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## 设定 ```.travis.yml</div></pre></td></tr></table></figure></p>
-<p>把刚刚制作的 <figure class="highlight plain"><figcaption><span>移至 ```.travis/ssh_key.enc``` ，并在```.travis ```文件夹中建立 ```ssh_config``` 档案，指定 Travis 上的 SSH 设定。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
-<p>Host github.com<br>  User git<br>  StrictHostKeyChecking no<br>  IdentityFile ~/.ssh/id_rsa<br>  IdentitiesOnly yes<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">因为刚刚修改了 ```ssh_key.enc``` 的位址，所以我们要顺带修改刚刚 Travis 在 ```.travis.yml``` 帮我们插入的那条解密指令。请注意，不要照抄这段指令，每个人的环境变数都不一样。</div></pre></td></tr></table></figure></p>
-<ul>
-<li><p>openssl aes-256-cbc -K $encrypted_06b8e90ac19b_key -iv $encrypted_06b8e90ac19b_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">这条指令会利用 openssl 解密 Private key ，并把解密后的档案存放在 ```~/.ssh/id_rsa``` ，接着指定这个档案的权限：</div></pre></td></tr></table></figure>
-</li>
-<li><p>chmod 600 ~/.ssh/id_rsa</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">然后，把 Private key 加入到系统中：</div></pre></td></tr></table></figure>
-</li>
-<li><p>eval $（ssh-agent）</p>
-</li>
-<li><p>ssh-add ~/.ssh/id_rsa</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">记得刚刚我们制作的 ```ssh_config``` 档案吗？别忘了把他复制到 ```~/.ssh``` 文件夹：</div></pre></td></tr></table></figure>
-</li>
-<li><p>cp .travis/ssh_config ~/.ssh/config</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">为了让 git 操作能顺利进行，我们必须先设定 git 的使用者信息：</div></pre></td></tr></table></figure>
-</li>
-<li><p>git config –global user.name“Tommy Chen”</p>
-</li>
-<li>git config –global user.email tommy351@gmail.com<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">最后的结果可能如下，如果你和我一样使用 Hexo 的话可以参考看看</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>language: node_js</p>
-<p>node_js:</p>
-<ul>
-<li>“0.10”</li>
-</ul>
-<p>before_install:</p>
-<h1 id="Decrypt-the-private-key"><a href="#Decrypt-the-private-key" class="headerlink" title="Decrypt the private key"></a>Decrypt the private key</h1><ul>
-<li>openssl aes-256-cbc -K $encrypted_06b8e90ac19b_key -iv $encrypted_06b8e90ac19b_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d<h1 id="Set-the-permission-of-the-key"><a href="#Set-the-permission-of-the-key" class="headerlink" title="Set the permission of the key"></a>Set the permission of the key</h1></li>
-<li>chmod 600 ~/.ssh/id_rsa<h1 id="Start-SSH-agent"><a href="#Start-SSH-agent" class="headerlink" title="Start SSH agent"></a>Start SSH agent</h1></li>
-<li>eval $(ssh-agent)<h1 id="Add-the-private-key-to-the-system"><a href="#Add-the-private-key-to-the-system" class="headerlink" title="Add the private key to the system"></a>Add the private key to the system</h1></li>
-<li>ssh-add ~/.ssh/id_rsa<h1 id="Copy-SSH-config"><a href="#Copy-SSH-config" class="headerlink" title="Copy SSH config"></a>Copy SSH config</h1></li>
-<li>cp .travis/ssh_config ~/.ssh/config<h1 id="Set-Git-config"><a href="#Set-Git-config" class="headerlink" title="Set Git config"></a>Set Git config</h1></li>
-<li>git config –global user.name “Tommy Chen”</li>
-<li>git config –global user.email tommy351@gmail.com<h1 id="Install-Hexo"><a href="#Install-Hexo" class="headerlink" title="Install Hexo"></a>Install Hexo</h1></li>
-<li>npm install hexo@beta -g<h1 id="Clone-the-repository"><a href="#Clone-the-repository" class="headerlink" title="Clone the repository"></a>Clone the repository</h1></li>
-<li>git clone <a href="https://github.com/hexojs/hexojs.github.io" target="_blank" rel="external">https://github.com/hexojs/hexojs.github.io</a> .deploy</li>
-</ul>
-<p>script:</p>
-<ul>
-<li>hexo generate</li>
-<li>hexo deploy</li>
-</ul>
-<p>branches:<br>  only:</p>
-<pre><code>- master
-</code></pre><p>```</p>
+<p>假设 Private key 的档案名称为 <code>ssh_key</code>，Travis 会加密并产生 <code>ssh_key.enc</code> ，并自动在 <code>.travis.yml</code> 的 <code>before_install</code> 字段中，自动插入解密指令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis encrypt-file ssh_key --add</div></pre></td></tr></table></figure>
+<p>正常来说 Travis 会自动解析目前的 repo 并把 Private key 上传到相对应的 repo ，但有时可能会秀逗，这时你必须在指令后加上 <code>-r</code> 选项来指定 repo 名称，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis encrypt-file ssh_key --add -r hexojs/site</div></pre></td></tr></table></figure>
+<h2 id="设定-travis-yml"><a href="#设定-travis-yml" class="headerlink" title="设定 .travis.yml"></a>设定 <code>.travis.yml</code></h2><p>把刚刚制作的 <code>ssh_key.enc</code> 移至 <code>.travis/ssh_key.enc</code> ，并在 <code>.travis</code> 文件夹中建立 <code>ssh_config</code> 档案，指定 Travis 上的 SSH 设定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Host github.com</div><div class="line">  User git</div><div class="line">  StrictHostKeyChecking no</div><div class="line">  IdentityFile ~/.ssh/id_rsa</div><div class="line">  IdentitiesOnly yes</div></pre></td></tr></table></figure>
+<p>因为刚刚修改了 <code>ssh_key.enc</code> 的位址，所以我们要顺带修改刚刚 Travis 在 <code>.travis.yml</code> 帮我们插入的那条解密指令。请注意，不要照抄这段指令，每个人的环境变数都不一样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- openssl aes-256-cbc -K $encrypted_06b8e90ac19b_key -iv $encrypted_06b8e90ac19b_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d</div></pre></td></tr></table></figure>
+<p>这条指令会利用 openssl 解密 Private key ，并把解密后的档案存放在 <code>~/.ssh/id_rsa</code> ，接着指定这个档案的权限：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- chmod 600 ~/.ssh/id_rsa</div></pre></td></tr></table></figure>
+<p>然后，把 Private key 加入到系统中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- eval $（ssh-agent）</div><div class="line">- ssh-add ~/.ssh/id_rsa</div></pre></td></tr></table></figure>
+<p>记得刚刚我们制作的 <code>ssh_config</code> 档案吗？别忘了把他复制到 <code>~/.ssh</code> 文件夹：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- cp .travis/ssh_config ~/.ssh/config</div></pre></td></tr></table></figure>
+<p>为了让 git 操作能顺利进行，我们必须先设定 git 的使用者信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- git config --global user.name“Tommy Chen”</div><div class="line">- git config --global user.email tommy351@gmail.com</div></pre></td></tr></table></figure>
+<p>最后的结果可能如下，如果你和我一样使用 Hexo 的话可以参考看看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">language: node_js</div><div class="line"></div><div class="line">node_js:</div><div class="line">  - &quot;0.10&quot;</div><div class="line"></div><div class="line">before_install:</div><div class="line">  # Decrypt the private key</div><div class="line">  - openssl aes-256-cbc -K $encrypted_06b8e90ac19b_key -iv $encrypted_06b8e90ac19b_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d</div><div class="line">  # Set the permission of the key</div><div class="line">  - chmod 600 ~/.ssh/id_rsa</div><div class="line">  # Start SSH agent</div><div class="line">  - eval $(ssh-agent)</div><div class="line">  # Add the private key to the system</div><div class="line">  - ssh-add ~/.ssh/id_rsa</div><div class="line">  # Copy SSH config</div><div class="line">  - cp .travis/ssh_config ~/.ssh/config</div><div class="line">  # Set Git config</div><div class="line">  - git config --global user.name &quot;Tommy Chen&quot;</div><div class="line">  - git config --global user.email tommy351@gmail.com</div><div class="line">  # Install Hexo</div><div class="line">  - npm install hexo@beta -g</div><div class="line">  # Clone the repository</div><div class="line">  - git clone https://github.com/hexojs/hexojs.github.io .deploy</div><div class="line"></div><div class="line">script:</div><div class="line">  - hexo generate</div><div class="line">  - hexo deploy</div><div class="line"></div><div class="line">branches:</div><div class="line">  only:</div><div class="line">    - master</div></pre></td></tr></table></figure>
 <blockquote>
 <p>引用：<a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">用 Travis CI 自動部署網站到 GitHub</a></p>
 <p>其他 [<code>.travis.yml</code>]<a href="https://github.com/51offer/51offer.github.com/blob/blog/.travis.yml(" target="_blank" rel="external">https://github.com/51offer/51offer.github.com/blob/blog/.travis.yml(</a>) 参考 </p>
