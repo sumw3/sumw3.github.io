@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Σ</title>
+  <subtitle>Avoid evil and do good! Seek peace and pursue it!</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://sumw3.com/"/>
+  <updated>2016-07-19T05:52:59.229Z</updated>
+  <id>http://sumw3.com/</id>
+  
+  <author>
+    <name>sumw3</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>通过VPS自动发布HEXO</title>
+    <link href="http://sumw3.com/2014/12/ciqvsabfs0008sbls1nfam4em/"/>
+    <id>http://sumw3.com/2014/12/ciqvsabfs0008sbls1nfam4em/</id>
+    <published>2014-12-31T05:00:00.000Z</published>
+    <updated>2016-07-19T05:52:59.229Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前已经在本地搭建了hexo的环境，但是还是需要每次都要在本地生成一下然后再提交到<strong>github</strong>或者<strong>gitcafe</strong>上。固定在一台电脑上写作的问题还不是太大，如果需要在不同电脑甚至不同设备上写的话就没有办法了。</p>
+<p>之前刚好看到<strong>Bandwagon Host</strong>的特价VPS，原来都是用着别人分享的shadowsocks，以防万一，还是自己搞一个比较安全靠谱，顺便也一起搭了一个VPN，方便移动设备使用。</p>
+<p>下面该VPS的详细配置，年付<code>$9.99</code>，相当便宜了。<br><a href="https://bandwagonhost.com/aff.php?aff=1604&amp;pid=22" target="_blank" rel="external">直达链接（我的小尾巴~）</a></p>
+<blockquote>
+<p><strong>Basic VPS - Unmanaged - 5G PROMO V2</strong><br>Unmanaged service HDD: 5 GB SSD RAM: 512 MB CPU: 1x Intel Xeon BW: 500 GB/mo Link speed: 1 Gigabit VPS technology: OpenVZ/KiwiVM Linux OS: 32-bit and 64-bit Centos, Debian, Ubuntu, Fedora Instant OS reload 1 Dedicated IPv4 address Full root access PPP and VPN support (tun/tap) Instant RDNS update from control panel No contract, anytime cancellation Strictly unmanaged, no support 99% uptime guarantee 30-day money back guarantee</p>
+</blockquote>
+<p>既然有了VPS，那我就可以把hexo的生成和发布都扔到上面去，只要我有新的markdown文件，自动通知VPS让其执行对应的同步、生成和发布即可。<br><img src="http://pubshare.qiniudn.com/sumw3hexo%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83.png" alt="脑图"></p>
+<a id="more"></a>
+<p>###GIT@OSC通知VPS更新<br>前面两步都没什么问题，主要是第三步，怎么让VPS知道我们已经更新的markdown文件并执行后续操作。</p>
+<p>对比几个国内的代码托管网站，最终我选择了<em>开源中国</em>的GIT（<strong>GIT@OSC</strong>），这也是我平常用得最多的代码托管网站。<strong>GIT@OSC</strong>提供了了一个非常好用的功能：<em>PUSH钩子</em>。<br><img src="http://pubshare.qiniudn.com/sumw3%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202014-12-31%20%E4%B8%8B%E5%8D%882.04.21.png" alt="PUSH钩子"><br>只要在钩子地址中填入对应的服务器地址，每次<strong>GIT@OSC</strong>收到新的<strong>PUSH</strong>的时候都会自动发一个<strong>POST</strong>请求至该地址，内容为该次<strong>PUSH</strong>的具体信息及<strong>PUSH钩子</strong>中设置的密码。</p>
+<p>因此，我们只需要在VPS上搭建一个简答的web服务器用来响应对应的请求获取通知即可。</p>
+<p>###VPS获取通知执行批处理</p>
+<p>####获取通知</p>
+<h5 id="1-nginx配置"><a href="#1-nginx配置" class="headerlink" title="1. nginx配置"></a>1. nginx配置</h5><p>获取通知主要通过nginx搭建反向代理服务器，把请求转发给Python后，通过Python执行请求的响应和后续的批处理。</p>
+<p>由于我VPS选用的是<code>Ubuntu</code>，所以安装nginx也非常简单，直接执行一下命令。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install nginx</div></pre></td></tr></table></figure></p>
+<p>修改<code>/etc/nginx/sites-available/default</code>文件，增加路由让其转发对应地址的请求至Python程序。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">location /update &#123;</div><div class="line">        proxy_pass http://127.0.0.1:1111;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>重启nginx：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo /etc/init.d/nginx restart</div></pre></td></tr></table></figure></p>
+<h5 id="2-Python配置"><a href="#2-Python配置" class="headerlink" title="2. Python配置"></a>2. Python配置</h5><p>代码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python3</span></div><div class="line"><span class="comment">#-*- coding:utf-8 -*-</span></div><div class="line"><span class="comment"># start a python service and watch the nginx request dog</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> http.server <span class="keyword">import</span> HTTPServer,CGIHTTPRequestHandler</div><div class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread,RLock</div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">import</span> logging</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> os.path</div><div class="line"></div><div class="line"></div><div class="line">_PWD=os.path.abspath(os.path.dirname(__file__))</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">execute_cmd</span><span class="params">(args,cwd=None,timeout=<span class="number">30</span>)</span>:</span></div><div class="line">    <span class="keyword">if</span> isinstance(args,str): args = [args]</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="keyword">with</span> subprocess.Popen(args,stdout=subprocess.PIPE,cwd=cwd) <span class="keyword">as</span> proc:</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                output,unused_err = proc.communicate(timeout=timeout)</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                proc.kill()</div><div class="line">                <span class="keyword">raise</span></div><div class="line">            retcode = proc.poll()</div><div class="line">            <span class="keyword">if</span> retcode:</div><div class="line">                <span class="keyword">raise</span> subprocess.CalledProcessError(retcode, proc.args, output=output)</div><div class="line">            <span class="keyword">return</span> output.decode(<span class="string">'utf-8'</span>,<span class="string">'ignore'</span>) <span class="keyword">if</span> output <span class="keyword">else</span> <span class="string">''</span></div><div class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> ex:</div><div class="line">        logging.error(<span class="string">'EXECUTE_CMD_ERROR: %s'</span>,<span class="string">' '</span>.join(str(x) <span class="keyword">for</span> x <span class="keyword">in</span> args))</div><div class="line">        <span class="keyword">raise</span> ex</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">HttpHandler</span><span class="params">(CGIHTTPRequestHandler)</span>:</span></div><div class="line">    _lock = RLock()</div><div class="line">    _counter = <span class="number">0</span></div><div class="line">    _building = <span class="keyword">False</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">build</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">with</span> HttpHandler._lock:</div><div class="line">            <span class="keyword">if</span> HttpHandler._counter == <span class="number">0</span> <span class="keyword">or</span> HttpHandler._building:</div><div class="line">                <span class="keyword">return</span></div><div class="line">        HttpHandler._counter = <span class="number">0</span></div><div class="line">        HttpHandler._building = <span class="keyword">True</span></div><div class="line">        logging.info(<span class="string">"BUILDING NOW..."</span>)</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            resp = execute_cmd(os.path.join(_PWD,<span class="string">'build.sh'</span>),cwd=_PWD,timeout=<span class="number">600</span>)</div><div class="line">            logging.info(resp)</div><div class="line">        <span class="keyword">finally</span>:</div><div class="line">            HttpHandler._building = <span class="keyword">False</span></div><div class="line">            self.build()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">do_GET</span><span class="params">(self)</span>:</span></div><div class="line">        self.do_POST()</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">do_POST</span><span class="params">(self)</span>:</span></div><div class="line">        self.send_response(<span class="number">200</span>,<span class="string">'OK'</span>)</div><div class="line">        self.end_headers()</div><div class="line">        self.wfile.write(<span class="string">b'OK'</span>)</div><div class="line">        self.wfile.flush()</div><div class="line">        <span class="keyword">with</span> HttpHandler._lock:</div><div class="line">            HttpHandler._counter += <span class="number">1</span></div><div class="line">        Thread(target=self.build).start()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    logging.basicConfig(format=<span class="string">'%(asctime)s %(levelname)s: %(message)s'</span>,level=logging.INFO)</div><div class="line"></div><div class="line">    port = int(sys.argv[<span class="number">1</span>]) <span class="keyword">if</span> len(sys.argv) &gt; <span class="number">1</span> <span class="keyword">else</span> <span class="number">1111</span></div><div class="line">    logging.info(<span class="string">'starting the server at 127.0.0.1:%s'</span>,port)</div><div class="line">    httpd = HTTPServer((<span class="string">'127.0.0.1'</span>,port),HttpHandler)</div><div class="line">    httpd.serve_forever()</div></pre></td></tr></table></figure></p>
+<p>将Python文件<code>hook.py</code>和对应的批处理文件<code>build.sh</code>都放置在hexo的目录下，启动Python监听：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ nohup python3 hook.py &gt;&gt; /tmp/hook.log 2&gt;&amp;1 &amp;</div></pre></td></tr></table></figure></p>
+<p>####批处理Shell<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"build at `date`"</span></div><div class="line">. ~/.nvm/nvm.sh</div><div class="line">nvm use 0.10.35</div><div class="line">git pull</div><div class="line">hexo g -<span class="_">-d</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"built successfully"</span></div></pre></td></tr></table></figure></p>
+<p>当然，为了让Python能够正确执行脚本，还需要执行一下命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo chmod +x build.sh</div></pre></td></tr></table></figure></p>
+<hr>
+<p>到此为止基本上都已经配置完毕，提交一个测试文件试一下，查看一下各自日志以及<strong>github</strong>的日志，没有问题，都成功了。</p>
+<p>以后终于可以直接提交markdown，而不用再去生成发布，哪怕是新电脑，没有环境问题，只要有浏览器有网络，一切都那么地简单。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;之前已经在本地搭建了hexo的环境，但是还是需要每次都要在本地生成一下然后再提交到&lt;strong&gt;github&lt;/strong&gt;或者&lt;strong&gt;gitcafe&lt;/strong&gt;上。固定在一台电脑上写作的问题还不是太大，如果需要在不同电脑甚至不同设备上写的话就没有办法了。&lt;/p&gt;
+&lt;p&gt;之前刚好看到&lt;strong&gt;Bandwagon Host&lt;/strong&gt;的特价VPS，原来都是用着别人分享的shadowsocks，以防万一，还是自己搞一个比较安全靠谱，顺便也一起搭了一个VPN，方便移动设备使用。&lt;/p&gt;
+&lt;p&gt;下面该VPS的详细配置，年付&lt;code&gt;$9.99&lt;/code&gt;，相当便宜了。&lt;br&gt;&lt;a href=&quot;https://bandwagonhost.com/aff.php?aff=1604&amp;amp;pid=22&quot;&gt;直达链接（我的小尾巴~）&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Basic VPS - Unmanaged - 5G PROMO V2&lt;/strong&gt;&lt;br&gt;Unmanaged service HDD: 5 GB SSD RAM: 512 MB CPU: 1x Intel Xeon BW: 500 GB/mo Link speed: 1 Gigabit VPS technology: OpenVZ/KiwiVM Linux OS: 32-bit and 64-bit Centos, Debian, Ubuntu, Fedora Instant OS reload 1 Dedicated IPv4 address Full root access PPP and VPN support (tun/tap) Instant RDNS update from control panel No contract, anytime cancellation Strictly unmanaged, no support 99% uptime guarantee 30-day money back guarantee&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;既然有了VPS，那我就可以把hexo的生成和发布都扔到上面去，只要我有新的markdown文件，自动通知VPS让其执行对应的同步、生成和发布即可。&lt;br&gt;&lt;img src=&quot;http://pubshare.qiniudn.com/sumw3hexo%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83.png&quot; alt=&quot;脑图&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="OpenProjects" scheme="http://sumw3.com/categories/OpenProjects/"/>
+    
+    
+      <category term="hexo" scheme="http://sumw3.com/tags/hexo/"/>
+    
+      <category term="vps" scheme="http://sumw3.com/tags/vps/"/>
+    
+      <category term="git" scheme="http://sumw3.com/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Raneto：用Markdown写作、Nodejs搭建的Wiki</title>
+    <link href="http://sumw3.com/2014/07/ciqvsabfh0002sbls2jkawgvy/"/>
+    <id>http://sumw3.com/2014/07/ciqvsabfh0002sbls2jkawgvy/</id>
+    <published>2014-07-11T06:30:02.000Z</published>
+    <updated>2016-07-19T05:52:59.229Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>最近对<strong>Markdown</strong>很感兴趣，刚在Github上搭建了这个站点，用来记录平时的一些技巧心得。但是还有一些属于经常用到的，可以不断套用的东西，用现在这个站来记录的话，查找起来比较麻烦。因此，想找一款能直接<strong>Markdown</strong>记录，用树形结构组织，支持全文检索的Wiki软件。Github上搜了一圈，对比了几个Repo，最终选择<a href="1"><strong>Raneto</strong></a>。</p>
+</blockquote>
+<h2 id="Raneto"><a href="#Raneto" class="headerlink" title="Raneto"></a>Raneto</h2><h3 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h3><h4 id="Markdown-powered-Knowledgebase-for-Nodejs"><a href="#Markdown-powered-Knowledgebase-for-Nodejs" class="headerlink" title="Markdown powered Knowledgebase for Nodejs"></a>Markdown powered Knowledgebase for Nodejs</h4><blockquote>
+<p>Raneto is an open source Knowledgebase platform that uses static Markdown files to power your Knowledgebase.</p>
+</blockquote>
+<ul>
+<li>基于<strong>Nodejs</strong>以及<strong>Express</strong>构建，支持<strong>GFM</strong>的<strong>Markdown</strong>文件，利用<strong>Lunr</strong>进行全文检索。</li>
+<li>基于文件目录的URL结构，无需数据库</li>
+<li>基于<strong>Bootstrap</strong>的响应式模板，方便多终端访问</li>
+</ul>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>由于是<strong>Nodejs</strong>应用，安装非常方便。<em>当然，前提是机器上已有<strong>Nodejs</strong></em></p>
+<ol>
+<li>下载托管在<strong>Github</strong>上的<strong>Raneto</strong>代码，这里提供最新的<a href="3"><em>Release</em>版本下载</a>。</li>
+<li>解压，在文件夹内用命令行执行<code>npm install</code>安装依赖包。</li>
+<li>命令行执行<code>npm start</code>启动应用。</li>
+<li>访问<code>http://localhost:3000</code>即可。<a id="more"></a>
+</li>
+</ol>
+<h3 id="内容管理"><a href="#内容管理" class="headerlink" title="内容管理"></a>内容管理</h3><p>默认的内容文件夹为<code>content</code>，里面默认已经有了<strong>Raneto</strong>的说明手册，很好的例子。<br>修改文件名或者文件夹名称可以改变对应的URL，只要浏览器刷新整个结构貌似就会重建，这点非常强大，修改文件内容也是一样，刷新就显示。<br>当然，通过修改<code>config.js</code>可以自定义<code>content</code>文件夹位置和静态图片位置。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// The base URL of your images folder (can use %image_url% in Markdown files)</div><div class="line">image_url: '/images',</div><div class="line"></div><div class="line">// Specify the path of your content folder where all your '.md' files are located</div><div class="line">content_dir: './content/',</div></pre></td></tr></table></figure></p>
+<h3 id="其他扩展及问题"><a href="#其他扩展及问题" class="headerlink" title="其他扩展及问题"></a>其他扩展及问题</h3><p>目前最理想的使用方法是在<strong>VPS</strong>上结合<strong>Dropbox</strong>来同步<code>content</code>和<code>image</code>文件夹，这样的话就可以从任意终端来更新访问了，感觉会非常方便。</p>
+<p>当然，目前<strong>Raneto</strong>最大的问题是中文支持，其实不应该算<strong>Raneto</strong>的问题，而应该是<a href="4"><strong>lunrjs</strong></a>的问题。目前没有中文、日文检索的支持。</p>
+<p>查看了<strong>lunrjs</strong>的<a href="https://github.com/olivernn/lunr.js/issues" target="_blank" rel="external"><em>Issues</em></a>，发现<a href="https://github.com/ming300" target="_blank" rel="external"><em>ming300</em></a>同学针对这个问题已经提过<a href="https://github.com/olivernn/lunr.js/pull/96" target="_blank" rel="external"><em>Pull Request</em></a>，有需要可以参考一下。</p>
+<blockquote>
+<p><strong>lunrjs</strong>也有语言支持的插件<a href="https://github.com/MihaiValentin/lunr-languages" target="_blank" rel="external"><strong>lunr-languages</strong></a>，但是也很遗憾，还没有中文的支持，下次研究一下，看看能不能搞一个提交上去。</p>
+</blockquote>
+<p>既然检索不了中文，那我就用定义一些<code>Keyword</code>来方便检索吧。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;最近对&lt;strong&gt;Markdown&lt;/strong&gt;很感兴趣，刚在Github上搭建了这个站点，用来记录平时的一些技巧心得。但是还有一些属于经常用到的，可以不断套用的东西，用现在这个站来记录的话，查找起来比较麻烦。因此，想找一款能直接&lt;strong&gt;Markdown&lt;/strong&gt;记录，用树形结构组织，支持全文检索的Wiki软件。Github上搜了一圈，对比了几个Repo，最终选择&lt;a href=&quot;1&quot;&gt;&lt;strong&gt;Raneto&lt;/strong&gt;&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;Raneto&quot;&gt;&lt;a href=&quot;#Raneto&quot; class=&quot;headerlink&quot; title=&quot;Raneto&quot;&gt;&lt;/a&gt;Raneto&lt;/h2&gt;&lt;h3 id=&quot;简单介绍&quot;&gt;&lt;a href=&quot;#简单介绍&quot; class=&quot;headerlink&quot; title=&quot;简单介绍&quot;&gt;&lt;/a&gt;简单介绍&lt;/h3&gt;&lt;h4 id=&quot;Markdown-powered-Knowledgebase-for-Nodejs&quot;&gt;&lt;a href=&quot;#Markdown-powered-Knowledgebase-for-Nodejs&quot; class=&quot;headerlink&quot; title=&quot;Markdown powered Knowledgebase for Nodejs&quot;&gt;&lt;/a&gt;Markdown powered Knowledgebase for Nodejs&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;Raneto is an open source Knowledgebase platform that uses static Markdown files to power your Knowledgebase.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;基于&lt;strong&gt;Nodejs&lt;/strong&gt;以及&lt;strong&gt;Express&lt;/strong&gt;构建，支持&lt;strong&gt;GFM&lt;/strong&gt;的&lt;strong&gt;Markdown&lt;/strong&gt;文件，利用&lt;strong&gt;Lunr&lt;/strong&gt;进行全文检索。&lt;/li&gt;
+&lt;li&gt;基于文件目录的URL结构，无需数据库&lt;/li&gt;
+&lt;li&gt;基于&lt;strong&gt;Bootstrap&lt;/strong&gt;的响应式模板，方便多终端访问&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h3&gt;&lt;p&gt;由于是&lt;strong&gt;Nodejs&lt;/strong&gt;应用，安装非常方便。&lt;em&gt;当然，前提是机器上已有&lt;strong&gt;Nodejs&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;下载托管在&lt;strong&gt;Github&lt;/strong&gt;上的&lt;strong&gt;Raneto&lt;/strong&gt;代码，这里提供最新的&lt;a href=&quot;3&quot;&gt;&lt;em&gt;Release&lt;/em&gt;版本下载&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;解压，在文件夹内用命令行执行&lt;code&gt;npm install&lt;/code&gt;安装依赖包。&lt;/li&gt;
+&lt;li&gt;命令行执行&lt;code&gt;npm start&lt;/code&gt;启动应用。&lt;/li&gt;
+&lt;li&gt;访问&lt;code&gt;http://localhost:3000&lt;/code&gt;即可。
+    
+    </summary>
+    
+      <category term="OpenProjects" scheme="http://sumw3.com/categories/OpenProjects/"/>
+    
+    
+      <category term="raneto" scheme="http://sumw3.com/tags/raneto/"/>
+    
+      <category term="wiki" scheme="http://sumw3.com/tags/wiki/"/>
+    
+      <category term="markdown" scheme="http://sumw3.com/tags/markdown/"/>
+    
+      <category term="nodejs" scheme="http://sumw3.com/tags/nodejs/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SQL SERVER 2005恢复数据错误（3154）</title>
+    <link href="http://sumw3.com/2014/07/ciqvsabfc0000sblskj26vwj4/"/>
+    <id>http://sumw3.com/2014/07/ciqvsabfc0000sblskj26vwj4/</id>
+    <published>2014-07-09T12:18:31.000Z</published>
+    <updated>2016-07-19T05:52:59.229Z</updated>
+    
+    <content type="html"><![CDATA[<p>###问题</p>
+<p>在<strong>SqlServer2005</strong>的<strong>Management studio</strong>里使用<code>bak</code>文件还原数据库的时候总是会发生下面的错误。</p>
+<p><img src="http://images.cnblogs.com/cnblogs_com/adandelion/BACKERROR.GIF" alt="SQL Server restore error"></p>
+<blockquote>
+<p>Restore failed for Server ‘ADANDELI’. (Microsoft.SqlServer.Smo)<br>An exception occurred while executing a Transact-SQL statement or batch.  (Microsoft.SqlServer.ConnectionInfo<br>The backup set holds a backup of a database other than the existing ‘AAA’ database.<br>RESTORE DATABASE is terminating abnormally. (Microsoft SQL Server，错误: 3154)</p>
+</blockquote>
+<a id="more"></a>
+<p>###解决方法：</p>
+<p>####Step 1</p>
+<p>查询备份文件中的逻辑文件名称</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">USE</span> <span class="keyword">master</span></div><div class="line"><span class="keyword">RESTORE</span> FILELISTONLY</div><div class="line">   <span class="keyword">FROM</span> DISK = <span class="string">'C:\back.Bak'</span></div><div class="line"><span class="keyword">Go</span></div></pre></td></tr></table></figure>
+<p>####Step 2</p>
+<p>利用bak恢复数据库，强制还原<code>(REPLACE)</code>。<br><code>STATS = 10</code>每完成10%显示一条记录。<br><code>DBTest</code>和<code>DBTest_log</code>是上面<code>C:\back.Bak</code>里的逻辑文件</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">USE</span> <span class="keyword">master</span></div><div class="line"><span class="keyword">RESTORE</span> <span class="keyword">DATABASE</span> DB_Test</div><div class="line">   <span class="keyword">FROM</span> DISK = <span class="string">'C:\back.Bak'</span></div><div class="line">   <span class="keyword">WITH</span> <span class="keyword">MOVE</span> <span class="string">'DBTest'</span> <span class="keyword">TO</span> <span class="string">'C:\Program Files\Microsoft SQL Server2005\Data\DB.mdf'</span>,</div><div class="line">   <span class="keyword">MOVE</span> <span class="string">'DBTest_log'</span> <span class="keyword">TO</span> <span class="string">'C:\Program Files\Microsoft SQL Server2005\Data\DB_log.ldf'</span>,</div><div class="line">STATS = <span class="number">10</span>, <span class="keyword">REPLACE</span></div><div class="line"><span class="keyword">GO</span></div></pre></td></tr></table></figure>
+<p>到此数据库恢复完毕，在数据库列表中应该会出现名为<code>DB_Test</code>的数据库。</p>
+<blockquote>
+<p>代码中相关参数请参考实际自行修改</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;###问题&lt;/p&gt;
+&lt;p&gt;在&lt;strong&gt;SqlServer2005&lt;/strong&gt;的&lt;strong&gt;Management studio&lt;/strong&gt;里使用&lt;code&gt;bak&lt;/code&gt;文件还原数据库的时候总是会发生下面的错误。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://images.cnblogs.com/cnblogs_com/adandelion/BACKERROR.GIF&quot; alt=&quot;SQL Server restore error&quot;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Restore failed for Server ‘ADANDELI’. (Microsoft.SqlServer.Smo)&lt;br&gt;An exception occurred while executing a Transact-SQL statement or batch.  (Microsoft.SqlServer.ConnectionInfo&lt;br&gt;The backup set holds a backup of a database other than the existing ‘AAA’ database.&lt;br&gt;RESTORE DATABASE is terminating abnormally. (Microsoft SQL Server，错误: 3154)&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="Problems" scheme="http://sumw3.com/categories/Problems/"/>
+    
+    
+      <category term="sql server 2005" scheme="http://sumw3.com/tags/sql-server-2005/"/>
+    
+      <category term="备份还原" scheme="http://sumw3.com/tags/%E5%A4%87%E4%BB%BD%E8%BF%98%E5%8E%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>开始使用Hexo</title>
+    <link href="http://sumw3.com/2014/07/ciqvsabfr0006sblsjxdeznnd/"/>
+    <id>http://sumw3.com/2014/07/ciqvsabfr0006sblsjxdeznnd/</id>
+    <published>2014-07-08T02:23:38.000Z</published>
+    <updated>2016-07-19T05:52:59.229Z</updated>
+    
+    <content type="html"><![CDATA[<p>原来网站是<strong>wordpress</strong>的，用的也是免费空间<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。</p>
+<blockquote>
+<p>关于<strong>000webhost</strong>，注册可能会麻烦一点，需要挂<strong>VPN</strong>或者使用代理，具体方法可自行Google。</p>
+</blockquote>
+<p>###初识Hexo</p>
+<p>一开始只是想用<strong>Markdown</strong>来写博客，但是<strong>wordpress</strong>本身对<strong>Markdown</strong>还不能支持，试了几个插件，效果都不是那么理想，在线编辑也都不支持预览，这对于一个<strong>Markdown</strong>新手来说，很不放心。</p>
+<p>最近逛<strong>v2ex</strong>的时候也经常看到<strong>Github</strong>上搭建的静态博客。作为一个业余码农，博客更多的是记录一些平常碰到的技术问题和自己的一些学习心得，所以一个能够专注于文字和代码的<strong>Markdown</strong>加上<strong>Github</strong>这个无限免费的平台，非常有吸引力。</p>
+<p>在<strong>Github</strong>上发布博客的工具也不少，目前最流行<strong>jekyll</strong>和<strong>octopress</strong>，但都是基于Ruby的，而<strong>Hexo</strong>是基于<strong>nodejs</strong>，<br>且生成速度更快，所以毫不犹豫的选择了<strong>Hexo</strong>。<br><a id="more"></a></p>
+<p>###在Windows和Mac上安装Hexo</p>
+<p>原来机器上就已经有<strong>nodejs</strong>、<strong>git</strong>环境了，所以安装<strong>Hexo</strong>就非常简单，一句代码就搞定了。<br><code>npm install hexo -g</code></p>
+<p>然后就按照<a href="http://hexo.io/docs/" target="_blank" rel="external"><strong>官网设置手册</strong></a>一步步设置就行，非常简单，并且网上资料也很多，随便一个问题都能Google到答案。</p>
+<p>###配置Hexo</p>
+<p>初识情况下<strong>Hexo</strong>就能非常完美的运行了，当然，作为中文用户来说，首先设置一下语言选项：<br><code>language: zh-CN</code><br>日期格式原来英文的，不太适应，也顺便改了一下：<br><code>date_format: YYYY-MM-D</code><br>剩下的就默认，最后安装了下面两个插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&quot;hexo-generator-feed&quot;: &quot;^0.1.2&quot;,  </div><div class="line">&quot;hexo-generator-sitemap&quot;: &quot;~0.1.4&quot;</div></pre></td></tr></table></figure></p>
+<p>主题的话，官方也提供了很多，<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="external">https://github.com/hexojs/hexo/wiki/Themes</a>，选择一个合适的，然后稍做修改即可。</p>
+<p>我把整个文件夹<code>Github Page</code>也作为一个<code>Repo</code>同步了，这样的话不管是<strong>Windows</strong>上面还是<strong>Mac</strong>上面都可以同步修改了，比较方便。</p>
+<blockquote>
+<p>当然利用各种云盘同步也不错，我懒得装客户端了，就直接<strong>Git</strong>了。</p>
+</blockquote>
+<p>###问题点</p>
+<p>目前觉得最麻烦的还是每次发布必须在电脑上执行一下<code>hexo d</code>，用其他电脑想发布新内容的话会比较麻烦，更不用说移动设备了。</p>
+<p>下一步准备弄个<strong>VPS</strong>，把<strong>Hexo</strong>部署在上面，然后用同步盘同步到<strong>VPS</strong>后定时执行<code>hexo g</code>、<code>hexo d</code>应该就可以了吧。</p>
+<p>目前就这么多内容，下次想到什么再补充吧。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;原来网站是&lt;strong&gt;wordpress&lt;/strong&gt;的，用的也是免费空间&lt;a href=&quot;http://www.000webhost.com&quot;&gt;&lt;strong&gt;000webhost&lt;/strong&gt;&lt;/a&gt;。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐&lt;a href=&quot;http://www.000webhost.com&quot;&gt;&lt;strong&gt;000webhost&lt;/strong&gt;&lt;/a&gt;。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;关于&lt;strong&gt;000webhost&lt;/strong&gt;，注册可能会麻烦一点，需要挂&lt;strong&gt;VPN&lt;/strong&gt;或者使用代理，具体方法可自行Google。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;###初识Hexo&lt;/p&gt;
+&lt;p&gt;一开始只是想用&lt;strong&gt;Markdown&lt;/strong&gt;来写博客，但是&lt;strong&gt;wordpress&lt;/strong&gt;本身对&lt;strong&gt;Markdown&lt;/strong&gt;还不能支持，试了几个插件，效果都不是那么理想，在线编辑也都不支持预览，这对于一个&lt;strong&gt;Markdown&lt;/strong&gt;新手来说，很不放心。&lt;/p&gt;
+&lt;p&gt;最近逛&lt;strong&gt;v2ex&lt;/strong&gt;的时候也经常看到&lt;strong&gt;Github&lt;/strong&gt;上搭建的静态博客。作为一个业余码农，博客更多的是记录一些平常碰到的技术问题和自己的一些学习心得，所以一个能够专注于文字和代码的&lt;strong&gt;Markdown&lt;/strong&gt;加上&lt;strong&gt;Github&lt;/strong&gt;这个无限免费的平台，非常有吸引力。&lt;/p&gt;
+&lt;p&gt;在&lt;strong&gt;Github&lt;/strong&gt;上发布博客的工具也不少，目前最流行&lt;strong&gt;jekyll&lt;/strong&gt;和&lt;strong&gt;octopress&lt;/strong&gt;，但都是基于Ruby的，而&lt;strong&gt;Hexo&lt;/strong&gt;是基于&lt;strong&gt;nodejs&lt;/strong&gt;，&lt;br&gt;且生成速度更快，所以毫不犹豫的选择了&lt;strong&gt;Hexo&lt;/strong&gt;。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="OpenProjects" scheme="http://sumw3.com/categories/OpenProjects/"/>
+    
+    
+      <category term="markdown" scheme="http://sumw3.com/tags/markdown/"/>
+    
+      <category term="nodejs" scheme="http://sumw3.com/tags/nodejs/"/>
+    
+      <category term="hexo" scheme="http://sumw3.com/tags/hexo/"/>
+    
+      <category term="github" scheme="http://sumw3.com/tags/github/"/>
+    
+  </entry>
+  
+</feed>
