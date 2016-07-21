@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sumw3.com/"/>
-  <updated>2016-07-19T05:52:59.229Z</updated>
+  <updated>2016-07-21T05:31:34.123Z</updated>
   <id>http://sumw3.com/</id>
   
   <author>
@@ -16,9 +16,96 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>用 Travis CI 自动部署 Hexo</title>
+    <link href="http://sumw3.com/2016/07/ciqvw2yns000078lsc46sc6lt/"/>
+    <id>http://sumw3.com/2016/07/ciqvw2yns000078lsc46sc6lt/</id>
+    <published>2016-07-21T05:21:38.000Z</published>
+    <updated>2016-07-21T05:31:34.123Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 <code>.travis.yml</code> 的话，请先制作一个新的 <code>.travis.yml</code> 。</p>
+<h2 id="Deploy-Key"><a href="#Deploy-Key" class="headerlink" title="Deploy Key"></a>Deploy Key</h2><p>首先你必须用 <code>ssh-keygen</code> 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</div></pre></td></tr></table></figure></p>
+<p>在制作 SSH key 时，请把 passphrase 留空，因为在 Travis 上输入密码很麻烦，我目前还找不到比较简便的方式，如果各位知道的话欢迎提供给我。<br>当 SSH key 制作完成后，复制 Public key 到GitHub上的 Deploy key 字段，如下：</p>
+<p><img src="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png" alt=""></p>
+<h2 id="加密-Private-Key"><a href="#加密-Private-Key" class="headerlink" title="加密 Private Key"></a>加密 Private Key</h2><p>首先，安装 Travis 的命令列工具：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gem install travis</div></pre></td></tr></table></figure>
+<p>在安装完毕后，透过命令列工具登入到 Travis ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis login --auto</div></pre></td></tr></table></figure>
+<p>如此一来，我们就能透过 Travis 提供的命令列工具加密刚刚所制作的 Private key ，并把它上传到 Travis 上供日后使用。</p>
+<p>假设 Private key 的档案名称为 <figure class="highlight plain"><figcaption><span>会加密并产生 ```ssh_key.enc``` ，并自动在 ```.travis.yml``` 的 ```before_install``` 字段中，自动插入解密指令。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>$ travis encrypt-file ssh_key –add<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">正常来说 Travis 会自动解析目前的 repo 并把 Private key 上传到相对应的 repo ，但有时可能会秀逗，这时你必须在指令后加上 ```-r``` 选项来指定 repo 名称，例如：</div></pre></td></tr></table></figure></p>
+<p>$ travis encrypt-file ssh_key –add -r hexojs/site<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## 设定 ```.travis.yml</div></pre></td></tr></table></figure></p>
+<p>把刚刚制作的 <figure class="highlight plain"><figcaption><span>移至 ```.travis/ssh_key.enc``` ，并在```.travis ```文件夹中建立 ```ssh_config``` 档案，指定 Travis 上的 SSH 设定。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>Host github.com<br>  User git<br>  StrictHostKeyChecking no<br>  IdentityFile ~/.ssh/id_rsa<br>  IdentitiesOnly yes<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">因为刚刚修改了 ```ssh_key.enc``` 的位址，所以我们要顺带修改刚刚 Travis 在 ```.travis.yml``` 帮我们插入的那条解密指令。请注意，不要照抄这段指令，每个人的环境变数都不一样。</div></pre></td></tr></table></figure></p>
+<ul>
+<li><p>openssl aes-256-cbc -K $encrypted_06b8e90ac19b_key -iv $encrypted_06b8e90ac19b_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">这条指令会利用 openssl 解密 Private key ，并把解密后的档案存放在 ```~/.ssh/id_rsa``` ，接着指定这个档案的权限：</div></pre></td></tr></table></figure>
+</li>
+<li><p>chmod 600 ~/.ssh/id_rsa</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">然后，把 Private key 加入到系统中：</div></pre></td></tr></table></figure>
+</li>
+<li><p>eval $（ssh-agent）</p>
+</li>
+<li><p>ssh-add ~/.ssh/id_rsa</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">记得刚刚我们制作的 ```ssh_config``` 档案吗？别忘了把他复制到 ```~/.ssh``` 文件夹：</div></pre></td></tr></table></figure>
+</li>
+<li><p>cp .travis/ssh_config ~/.ssh/config</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">为了让 git 操作能顺利进行，我们必须先设定 git 的使用者信息：</div></pre></td></tr></table></figure>
+</li>
+<li><p>git config –global user.name“Tommy Chen”</p>
+</li>
+<li>git config –global user.email tommy351@gmail.com<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">最后的结果可能如下，如果你和我一样使用 Hexo 的话可以参考看看</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>language: node_js</p>
+<p>node_js:</p>
+<ul>
+<li>“0.10”</li>
+</ul>
+<p>before_install:</p>
+<h1 id="Decrypt-the-private-key"><a href="#Decrypt-the-private-key" class="headerlink" title="Decrypt the private key"></a>Decrypt the private key</h1><ul>
+<li>openssl aes-256-cbc -K $encrypted_06b8e90ac19b_key -iv $encrypted_06b8e90ac19b_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d<h1 id="Set-the-permission-of-the-key"><a href="#Set-the-permission-of-the-key" class="headerlink" title="Set the permission of the key"></a>Set the permission of the key</h1></li>
+<li>chmod 600 ~/.ssh/id_rsa<h1 id="Start-SSH-agent"><a href="#Start-SSH-agent" class="headerlink" title="Start SSH agent"></a>Start SSH agent</h1></li>
+<li>eval $(ssh-agent)<h1 id="Add-the-private-key-to-the-system"><a href="#Add-the-private-key-to-the-system" class="headerlink" title="Add the private key to the system"></a>Add the private key to the system</h1></li>
+<li>ssh-add ~/.ssh/id_rsa<h1 id="Copy-SSH-config"><a href="#Copy-SSH-config" class="headerlink" title="Copy SSH config"></a>Copy SSH config</h1></li>
+<li>cp .travis/ssh_config ~/.ssh/config<h1 id="Set-Git-config"><a href="#Set-Git-config" class="headerlink" title="Set Git config"></a>Set Git config</h1></li>
+<li>git config –global user.name “Tommy Chen”</li>
+<li>git config –global user.email tommy351@gmail.com<h1 id="Install-Hexo"><a href="#Install-Hexo" class="headerlink" title="Install Hexo"></a>Install Hexo</h1></li>
+<li>npm install hexo@beta -g<h1 id="Clone-the-repository"><a href="#Clone-the-repository" class="headerlink" title="Clone the repository"></a>Clone the repository</h1></li>
+<li>git clone <a href="https://github.com/hexojs/hexojs.github.io" target="_blank" rel="external">https://github.com/hexojs/hexojs.github.io</a> .deploy</li>
+</ul>
+<p>script:</p>
+<ul>
+<li>hexo generate</li>
+<li>hexo deploy</li>
+</ul>
+<p>branches:<br>  only:</p>
+<pre><code>- master
+</code></pre><p>```</p>
+<blockquote>
+<p>引用：<a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">用 Travis CI 自動部署網站到 GitHub</a></p>
+<p>其他 [<code>.travis.yml</code>]<a href="https://github.com/51offer/51offer.github.com/blob/blog/.travis.yml(" target="_blank" rel="external">https://github.com/51offer/51offer.github.com/blob/blog/.travis.yml(</a>) 参考 </p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;开始之前&quot;&gt;&lt;a href=&quot;#开始之前&quot; class=&quot;headerlink&quot; title=&quot;开始之前&quot;&gt;&lt;/a&gt;开始之前&lt;/h2&gt;&lt;p&gt;在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立
+    
+    </summary>
+    
+      <category term="OpenProjects" scheme="http://sumw3.com/categories/OpenProjects/"/>
+    
+    
+      <category term="hexo" scheme="http://sumw3.com/tags/hexo/"/>
+    
+      <category term="Travis CI" scheme="http://sumw3.com/tags/Travis-CI/"/>
+    
+  </entry>
+  
+  <entry>
     <title>通过VPS自动发布HEXO</title>
-    <link href="http://sumw3.com/2014/12/ciqvsabfs0008sbls1nfam4em/"/>
-    <id>http://sumw3.com/2014/12/ciqvsabfs0008sbls1nfam4em/</id>
+    <link href="http://sumw3.com/2014/12/ciqvvx0lm00074zlslw3u3qnk/"/>
+    <id>http://sumw3.com/2014/12/ciqvvx0lm00074zlslw3u3qnk/</id>
     <published>2014-12-31T05:00:00.000Z</published>
     <updated>2016-07-19T05:52:59.229Z</updated>
     
@@ -73,8 +160,8 @@
   
   <entry>
     <title>Raneto：用Markdown写作、Nodejs搭建的Wiki</title>
-    <link href="http://sumw3.com/2014/07/ciqvsabfh0002sbls2jkawgvy/"/>
-    <id>http://sumw3.com/2014/07/ciqvsabfh0002sbls2jkawgvy/</id>
+    <link href="http://sumw3.com/2014/07/ciqvvx0lc00024zlsujju16fw/"/>
+    <id>http://sumw3.com/2014/07/ciqvvx0lc00024zlsujju16fw/</id>
     <published>2014-07-11T06:30:02.000Z</published>
     <updated>2016-07-19T05:52:59.229Z</updated>
     
@@ -144,8 +231,8 @@
   
   <entry>
     <title>SQL SERVER 2005恢复数据错误（3154）</title>
-    <link href="http://sumw3.com/2014/07/ciqvsabfc0000sblskj26vwj4/"/>
-    <id>http://sumw3.com/2014/07/ciqvsabfc0000sblskj26vwj4/</id>
+    <link href="http://sumw3.com/2014/07/ciqvvx0l700004zls1szayndc/"/>
+    <id>http://sumw3.com/2014/07/ciqvvx0l700004zls1szayndc/</id>
     <published>2014-07-09T12:18:31.000Z</published>
     <updated>2016-07-19T05:52:59.229Z</updated>
     
@@ -191,8 +278,8 @@
   
   <entry>
     <title>开始使用Hexo</title>
-    <link href="http://sumw3.com/2014/07/ciqvsabfr0006sblsjxdeznnd/"/>
-    <id>http://sumw3.com/2014/07/ciqvsabfr0006sblsjxdeznnd/</id>
+    <link href="http://sumw3.com/2014/07/ciqvvx0ll00064zlscd01nv8a/"/>
+    <id>http://sumw3.com/2014/07/ciqvvx0ll00064zlscd01nv8a/</id>
     <published>2014-07-08T02:23:38.000Z</published>
     <updated>2016-07-19T05:52:59.229Z</updated>
     
