@@ -109,19 +109,15 @@
     <entry>
       <title><![CDATA[SQL SERVER 2005恢复数据错误（3154）]]></title>
       <url>http://sumw3.com/2014/07/cirqb742y0000adlscvn43kxo/</url>
-      <content type="html"><![CDATA[<p>###问题</p>
-<p>在<strong>SqlServer2005</strong>的<strong>Management studio</strong>里使用<code>bak</code>文件还原数据库的时候总是会发生下面的错误。</p>
-<p><img src="http://images.cnblogs.com/cnblogs_com/adandelion/BACKERROR.GIF" alt="SQL Server restore error"></p>
+      <content type="html"><![CDATA[<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>在<strong>SqlServer2005</strong>的<strong>Management studio</strong>里使用<code>bak</code>文件还原数据库的时候总是会发生下面的错误。</p>
+<p><img src="http://ww1.sinaimg.cn/large/68f944b2gw1f6q3o9np43j20jj0hlwi7.jpg" alt="SQL Server restore error"></p>
 <blockquote>
 <p>Restore failed for Server ‘ADANDELI’. (Microsoft.SqlServer.Smo)<br>An exception occurred while executing a Transact-SQL statement or batch.  (Microsoft.SqlServer.ConnectionInfo<br>The backup set holds a backup of a database other than the existing ‘AAA’ database.<br>RESTORE DATABASE is terminating abnormally. (Microsoft SQL Server，错误: 3154)</p>
 </blockquote>
 <a id="more"></a>
-<p>###解决方法：</p>
-<p>####Step 1</p>
-<p>查询备份文件中的逻辑文件名称</p>
+<h3 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h3><h4 id="Step-1"><a href="#Step-1" class="headerlink" title="Step 1"></a>Step 1</h4><p>查询备份文件中的逻辑文件名称</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">USE</span> <span class="keyword">master</span></div><div class="line"><span class="keyword">RESTORE</span> FILELISTONLY</div><div class="line">   <span class="keyword">FROM</span> DISK = <span class="string">'C:\back.Bak'</span></div><div class="line"><span class="keyword">Go</span></div></pre></td></tr></table></figure>
-<p>####Step 2</p>
-<p>利用bak恢复数据库，强制还原<code>(REPLACE)</code>。<br><code>STATS = 10</code>每完成10%显示一条记录。<br><code>DBTest</code>和<code>DBTest_log</code>是上面<code>C:\back.Bak</code>里的逻辑文件</p>
+<h4 id="Step-2"><a href="#Step-2" class="headerlink" title="Step 2"></a>Step 2</h4><p>利用bak恢复数据库，强制还原<code>(REPLACE)</code>。<br><code>STATS = 10</code>每完成10%显示一条记录。<br><code>DBTest</code>和<code>DBTest_log</code>是上面<code>C:\back.Bak</code>里的逻辑文件</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">USE</span> <span class="keyword">master</span></div><div class="line"><span class="keyword">RESTORE</span> <span class="keyword">DATABASE</span> DB_Test</div><div class="line">   <span class="keyword">FROM</span> DISK = <span class="string">'C:\back.Bak'</span></div><div class="line">   <span class="keyword">WITH</span> <span class="keyword">MOVE</span> <span class="string">'DBTest'</span> <span class="keyword">TO</span> <span class="string">'C:\Program Files\Microsoft SQL Server2005\Data\DB.mdf'</span>,</div><div class="line">   <span class="keyword">MOVE</span> <span class="string">'DBTest_log'</span> <span class="keyword">TO</span> <span class="string">'C:\Program Files\Microsoft SQL Server2005\Data\DB_log.ldf'</span>,</div><div class="line">STATS = <span class="number">10</span>, <span class="keyword">REPLACE</span></div><div class="line"><span class="keyword">GO</span></div></pre></td></tr></table></figure>
 <p>到此数据库恢复完毕，在数据库列表中应该会出现名为<code>DB_Test</code>的数据库。</p>
 <blockquote>
