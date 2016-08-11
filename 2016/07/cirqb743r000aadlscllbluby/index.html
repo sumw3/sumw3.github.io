@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="sumw3, sum" />
+  <meta name="keywords" content="hexo,Travis CI," />
 
 
 
@@ -86,15 +86,24 @@
 
 
 
-<meta name="description" content="Avoid evil and do good! Seek peace and pursue it!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Σ">
-<meta property="og:url" content="http://sumw3.com/index.html">
+<meta name="description" content="开始之前在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 .travis.yml 的话，请先制作一个新的 .travis.yml 。
+Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。
+1$ ssh-keygen -t rsa -C &amp;q">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 Travis CI 自动部署 Hexo">
+<meta property="og:url" content="http://sumw3.com/2016/07/cirqb743r000aadlscllbluby/index.html">
 <meta property="og:site_name" content="Σ">
-<meta property="og:description" content="Avoid evil and do good! Seek peace and pursue it!">
+<meta property="og:description" content="开始之前在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 .travis.yml 的话，请先制作一个新的 .travis.yml 。
+Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。
+1$ ssh-keygen -t rsa -C &amp;q">
+<meta property="og:image" content="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png">
+<meta property="og:updated_time" content="2016-07-21T05:55:04.876Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Σ">
-<meta name="twitter:description" content="Avoid evil and do good! Seek peace and pursue it!">
+<meta name="twitter:title" content="用 Travis CI 自动部署 Hexo">
+<meta name="twitter:description" content="开始之前在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 .travis.yml 的话，请先制作一个新的 .travis.yml 。
+Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。
+1$ ssh-keygen -t rsa -C &amp;q">
+<meta name="twitter:image" content="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png">
 
 
 
@@ -115,9 +124,9 @@
 
 
 
-  <link rel="canonical" href="http://sumw3.com/"/>
+  <link rel="canonical" href="http://sumw3.com/2016/07/cirqb743r000aadlscllbluby/"/>
 
-  <title> Σ </title>
+  <title> 用 Travis CI 自动部署 Hexo | Σ </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -138,9 +147,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-right 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -260,9 +267,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -282,10 +289,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/07/cirqb743r000aadlscllbluby/" itemprop="url">
-                  用 Travis CI 自动部署 Hexo
-                </a>
+                用 Travis CI 自动部署 Hexo
               
             
           </h1>
@@ -297,7 +301,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-21T13:21:38+08:00" content="2016-07-21">
+            <time itemprop="dateCreated" datetime="2016-07-21T01:21:38-04:00" content="2016-07-21">
               2016-07-21
             </time>
           </span>
@@ -351,568 +355,96 @@
       
 
       
-        
-          <h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 <code>.travis.yml</code> 的话，请先制作一个新的 <code>.travis.yml</code> 。</p>
+        <h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 <code>.travis.yml</code> 的话，请先制作一个新的 <code>.travis.yml</code> 。</p>
 <h2 id="Deploy-Key"><a href="#Deploy-Key" class="headerlink" title="Deploy Key"></a>Deploy Key</h2><p>首先你必须用 <code>ssh-keygen</code> 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</div></pre></td></tr></table></figure>
 <p>在制作 SSH key 时，请把 passphrase 留空，因为在 Travis 上输入密码很麻烦，我目前还找不到比较简便的方式，如果各位知道的话欢迎提供给我。<br>当 SSH key 制作完成后，复制 Public key 到GitHub上的 Deploy key 字段，如下：</p>
 <p><img src="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png" alt=""></p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/07/cirqb743r000aadlscllbluby/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/12/cirqb743j0008adlsc47darc7/" itemprop="url">
-                  通过VPS自动发布HEXO
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-12-31T13:00:00+08:00" content="2014-12-31">
-              2014-12-31
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/OpenProjects/" itemprop="url" rel="index">
-                    <span itemprop="name">OpenProjects</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/12/cirqb743j0008adlsc47darc7/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/12/cirqb743j0008adlsc47darc7/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>之前已经在本地搭建了hexo的环境，但是还是需要每次都要在本地生成一下然后再提交到<strong>github</strong>或者<strong>gitcafe</strong>上。固定在一台电脑上写作的问题还不是太大，如果需要在不同电脑甚至不同设备上写的话就没有办法了。</p>
-<p>之前刚好看到<strong>Bandwagon Host</strong>的特价VPS，原来都是用着别人分享的shadowsocks，以防万一，还是自己搞一个比较安全靠谱，顺便也一起搭了一个VPN，方便移动设备使用。</p>
-<p>下面该VPS的详细配置，年付<code>$9.99</code>，相当便宜了。<br><a href="https://bandwagonhost.com/aff.php?aff=1604&amp;pid=22">直达链接（我的小尾巴~）</a></p>
+<a id="more"></a>
+<h2 id="加密-Private-Key"><a href="#加密-Private-Key" class="headerlink" title="加密 Private Key"></a>加密 Private Key</h2><p>首先，安装 Travis 的命令列工具：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gem install travis</div></pre></td></tr></table></figure>
+<p>在安装完毕后，透过命令列工具登入到 Travis ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis login --auto</div></pre></td></tr></table></figure>
+<p>如此一来，我们就能透过 Travis 提供的命令列工具加密刚刚所制作的 Private key ，并把它上传到 Travis 上供日后使用。</p>
+<p>假设 Private key 的档案名称为 <code>ssh_key</code>，Travis 会加密并产生 <code>ssh_key.enc</code> ，并自动在 <code>.travis.yml</code> 的 <code>before_install</code> 字段中，自动插入解密指令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis encrypt-file ssh_key --add</div></pre></td></tr></table></figure>
+<p>正常来说 Travis 会自动解析目前的 repo 并把 Private key 上传到相对应的 repo ，但有时可能会秀逗，这时你必须在指令后加上 <code>-r</code> 选项来指定 repo 名称，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis encrypt-file ssh_key --add -r hexojs/site</div></pre></td></tr></table></figure>
+<h2 id="设定-travis-yml"><a href="#设定-travis-yml" class="headerlink" title="设定 .travis.yml"></a>设定 <code>.travis.yml</code></h2><p>把刚刚制作的 <code>ssh_key.enc</code> 移至 <code>.travis/ssh_key.enc</code> ，并在 <code>.travis</code> 文件夹中建立 <code>ssh_config</code> 档案，指定 Travis 上的 SSH 设定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Host github.com</div><div class="line">  User git</div><div class="line">  StrictHostKeyChecking no</div><div class="line">  IdentityFile ~/.ssh/id_rsa</div><div class="line">  IdentitiesOnly yes</div></pre></td></tr></table></figure>
+<p>因为刚刚修改了 <code>ssh_key.enc</code> 的位址，所以我们要顺带修改刚刚 Travis 在 <code>.travis.yml</code> 帮我们插入的那条解密指令。请注意，不要照抄这段指令，每个人的环境变数都不一样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- openssl aes-256-cbc -K $encrypted_06b8e90ac19b_key -iv $encrypted_06b8e90ac19b_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d</div></pre></td></tr></table></figure>
+<p>这条指令会利用 openssl 解密 Private key ，并把解密后的档案存放在 <code>~/.ssh/id_rsa</code> ，接着指定这个档案的权限：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- chmod 600 ~/.ssh/id_rsa</div></pre></td></tr></table></figure>
+<p>然后，把 Private key 加入到系统中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- eval $（ssh-agent）</div><div class="line">- ssh-add ~/.ssh/id_rsa</div></pre></td></tr></table></figure>
+<p>记得刚刚我们制作的 <code>ssh_config</code> 档案吗？别忘了把他复制到 <code>~/.ssh</code> 文件夹：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- cp .travis/ssh_config ~/.ssh/config</div></pre></td></tr></table></figure>
+<p>为了让 git 操作能顺利进行，我们必须先设定 git 的使用者信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- git config --global user.name“Tommy Chen”</div><div class="line">- git config --global user.email tommy351@gmail.com</div></pre></td></tr></table></figure>
+<p>最后的结果可能如下，如果你和我一样使用 Hexo 的话可以参考看看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">language: node_js</div><div class="line"></div><div class="line">node_js:</div><div class="line">  - &quot;0.10&quot;</div><div class="line"></div><div class="line">before_install:</div><div class="line">  # Decrypt the private key</div><div class="line">  - openssl aes-256-cbc -K $encrypted_06b8e90ac19b_key -iv $encrypted_06b8e90ac19b_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d</div><div class="line">  # Set the permission of the key</div><div class="line">  - chmod 600 ~/.ssh/id_rsa</div><div class="line">  # Start SSH agent</div><div class="line">  - eval $(ssh-agent)</div><div class="line">  # Add the private key to the system</div><div class="line">  - ssh-add ~/.ssh/id_rsa</div><div class="line">  # Copy SSH config</div><div class="line">  - cp .travis/ssh_config ~/.ssh/config</div><div class="line">  # Set Git config</div><div class="line">  - git config --global user.name &quot;Tommy Chen&quot;</div><div class="line">  - git config --global user.email tommy351@gmail.com</div><div class="line">  # Install Hexo</div><div class="line">  - npm install hexo@beta -g</div><div class="line">  # Clone the repository</div><div class="line">  - git clone https://github.com/hexojs/hexojs.github.io .deploy</div><div class="line"></div><div class="line">script:</div><div class="line">  - hexo generate</div><div class="line">  - hexo deploy</div><div class="line"></div><div class="line">branches:</div><div class="line">  only:</div><div class="line">    - master</div></pre></td></tr></table></figure>
+<hr>
 <blockquote>
-<p><strong>Basic VPS - Unmanaged - 5G PROMO V2</strong><br>Unmanaged service HDD: 5 GB SSD RAM: 512 MB CPU: 1x Intel Xeon BW: 500 GB/mo Link speed: 1 Gigabit VPS technology: OpenVZ/KiwiVM Linux OS: 32-bit and 64-bit Centos, Debian, Ubuntu, Fedora Instant OS reload 1 Dedicated IPv4 address Full root access PPP and VPN support (tun/tap) Instant RDNS update from control panel No contract, anytime cancellation Strictly unmanaged, no support 99% uptime guarantee 30-day money back guarantee</p>
+<p>引用：<a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">用 Travis CI 自動部署網站到 GitHub</a></p>
+<p>其他 <a href="https://github.com/51offer/51offer.github.com/blob/blog/.travis.yml" target="_blank" rel="external"><code>.travis.yml</code></a> 参考 </p>
 </blockquote>
-<p>既然有了VPS，那我就可以把hexo的生成和发布都扔到上面去，只要我有新的markdown文件，自动通知VPS让其执行对应的同步、生成和发布即可。<br><img src="http://pubshare.qiniudn.com/sumw3hexo%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83.png" alt="脑图"></p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/12/cirqb743j0008adlsc47darc7/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/07/cirqb74340002adlsdzym9893/" itemprop="url">
-                  Raneto：用Markdown写作、Nodejs搭建的Wiki
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-07-11T14:30:02+08:00" content="2014-07-11">
-              2014-07-11
-            </time>
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/OpenProjects/" itemprop="url" rel="index">
-                    <span itemprop="name">OpenProjects</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
+            <a href="/tags/hexo/" rel="tag">#hexo</a>
           
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/07/cirqb74340002adlsdzym9893/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/07/cirqb74340002adlsdzym9893/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
+            <a href="/tags/Travis-CI/" rel="tag">#Travis CI</a>
           
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <blockquote>
-<p>最近对<strong>Markdown</strong>很感兴趣，刚在Github上搭建了这个站点，用来记录平时的一些技巧心得。但是还有一些属于经常用到的，可以不断套用的东西，用现在这个站来记录的话，查找起来比较麻烦。因此，想找一款能直接<strong>Markdown</strong>记录，用树形结构组织，支持全文检索的Wiki软件。Github上搜了一圈，对比了几个Repo，最终选择<a href="1"><strong>Raneto</strong></a>。</p>
-</blockquote>
-<h2 id="Raneto"><a href="#Raneto" class="headerlink" title="Raneto"></a>Raneto</h2><h3 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h3><h4 id="Markdown-powered-Knowledgebase-for-Nodejs"><a href="#Markdown-powered-Knowledgebase-for-Nodejs" class="headerlink" title="Markdown powered Knowledgebase for Nodejs"></a>Markdown powered Knowledgebase for Nodejs</h4><blockquote>
-<p>Raneto is an open source Knowledgebase platform that uses static Markdown files to power your Knowledgebase.</p>
-</blockquote>
-<ul>
-<li>基于<strong>Nodejs</strong>以及<strong>Express</strong>构建，支持<strong>GFM</strong>的<strong>Markdown</strong>文件，利用<strong>Lunr</strong>进行全文检索。</li>
-<li>基于文件目录的URL结构，无需数据库</li>
-<li>基于<strong>Bootstrap</strong>的响应式模板，方便多终端访问</li>
-</ul>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>由于是<strong>Nodejs</strong>应用，安装非常方便。<em>当然，前提是机器上已有<strong>Nodejs</strong></em></p>
-<ol>
-<li>下载托管在<strong>Github</strong>上的<strong>Raneto</strong>代码，这里提供最新的<a href="3"><em>Release</em>版本下载</a>。</li>
-<li>解压，在文件夹内用命令行执行<code>npm install</code>安装依赖包。</li>
-<li>命令行执行<code>npm start</code>启动应用。</li>
-<li>访问<code>http://localhost:3000</code>即可。
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/07/cirqb74340002adlsdzym9893/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/12/cirqb743j0008adlsc47darc7/" rel="next" title="通过VPS自动发布HEXO">
+                <i class="fa fa-chevron-left"></i> 通过VPS自动发布HEXO
+              </a>
+            
           </div>
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+          <div class="post-nav-prev post-nav-item">
             
-            
-              
-                
-                <a class="post-title-link" href="/2014/07/cirqb742y0000adlscvn43kxo/" itemprop="url">
-                  SQL SERVER 2005恢复数据错误（3154）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-07-09T20:18:31+08:00" content="2014-07-09">
-              2014-07-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Problems/" itemprop="url" rel="index">
-                    <span itemprop="name">Problems</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/07/cirqb742y0000adlscvn43kxo/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/07/cirqb742y0000adlscvn43kxo/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
+          </div>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>###问题</p>
-<p>在<strong>SqlServer2005</strong>的<strong>Management studio</strong>里使用<code>bak</code>文件还原数据库的时候总是会发生下面的错误。</p>
-<p><img src="http://images.cnblogs.com/cnblogs_com/adandelion/BACKERROR.GIF" alt="SQL Server restore error"></p>
-<blockquote>
-<p>Restore failed for Server ‘ADANDELI’. (Microsoft.SqlServer.Smo)<br>An exception occurred while executing a Transact-SQL statement or batch.  (Microsoft.SqlServer.ConnectionInfo<br>The backup set holds a backup of a database other than the existing ‘AAA’ database.<br>RESTORE DATABASE is terminating abnormally. (Microsoft SQL Server，错误: 3154)</p>
-</blockquote>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/07/cirqb742y0000adlscvn43kxo/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/07/cirqb743g0006adlsq9dm3kyi/" itemprop="url">
-                  开始使用Hexo
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-07-08T10:23:38+08:00" content="2014-07-08">
-              2014-07-08
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/OpenProjects/" itemprop="url" rel="index">
-                    <span itemprop="name">OpenProjects</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/07/cirqb743g0006adlsq9dm3kyi/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/07/cirqb743g0006adlsq9dm3kyi/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>原来网站是<strong>wordpress</strong>的，用的也是免费空间<a href="http://www.000webhost.com"><strong>000webhost</strong></a>。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐<a href="http://www.000webhost.com"><strong>000webhost</strong></a>。</p>
-<blockquote>
-<p>关于<strong>000webhost</strong>，注册可能会麻烦一点，需要挂<strong>VPN</strong>或者使用代理，具体方法可自行Google。</p>
-</blockquote>
-<p>###初识Hexo</p>
-<p>一开始只是想用<strong>Markdown</strong>来写博客，但是<strong>wordpress</strong>本身对<strong>Markdown</strong>还不能支持，试了几个插件，效果都不是那么理想，在线编辑也都不支持预览，这对于一个<strong>Markdown</strong>新手来说，很不放心。</p>
-<p>最近逛<strong>v2ex</strong>的时候也经常看到<strong>Github</strong>上搭建的静态博客。作为一个业余码农，博客更多的是记录一些平常碰到的技术问题和自己的一些学习心得，所以一个能够专注于文字和代码的<strong>Markdown</strong>加上<strong>Github</strong>这个无限免费的平台，非常有吸引力。</p>
-<p>在<strong>Github</strong>上发布博客的工具也不少，目前最流行<strong>jekyll</strong>和<strong>octopress</strong>，但都是基于Ruby的，而<strong>Hexo</strong>是基于<strong>nodejs</strong>，<br>且生成速度更快，所以毫不犹豫的选择了<strong>Hexo</strong>。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/07/cirqb743g0006adlsq9dm3kyi/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
@@ -920,6 +452,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/cirqb743r000aadlscllbluby/"
+           data-title="用 Travis CI 自动部署 Hexo" data-url="http://sumw3.com/2016/07/cirqb743r000aadlscllbluby/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -939,8 +479,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://7jpsga.com1.z0.glb.clouddn.com/logo.jpg"
@@ -1017,6 +566,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开始之前"><span class="nav-number">1.</span> <span class="nav-text">开始之前</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deploy-Key"><span class="nav-number">2.</span> <span class="nav-text">Deploy Key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加密-Private-Key"><span class="nav-number">3.</span> <span class="nav-text">加密 Private Key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设定-travis-yml"><span class="nav-number">4.</span> <span class="nav-text">设定 .travis.yml</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -1113,6 +673,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 

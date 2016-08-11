@@ -5,7 +5,7 @@
     
     <entry>
       <title><![CDATA[用 Travis CI 自动部署 Hexo]]></title>
-      <url>http://sumw3.com/2016/07/cirqb6b6n00029alsyayfx3pr/</url>
+      <url>http://sumw3.com/2016/07/cirqb743r000aadlscllbluby/</url>
       <content type="html"><![CDATA[<h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 <code>.travis.yml</code> 的话，请先制作一个新的 <code>.travis.yml</code> 。</p>
 <h2 id="Deploy-Key"><a href="#Deploy-Key" class="headerlink" title="Deploy Key"></a>Deploy Key</h2><p>首先你必须用 <code>ssh-keygen</code> 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</div></pre></td></tr></table></figure>
@@ -45,7 +45,7 @@
     
     <entry>
       <title><![CDATA[通过VPS自动发布HEXO]]></title>
-      <url>http://sumw3.com/2014/12/cirqb6b7200089als75dijq4v/</url>
+      <url>http://sumw3.com/2014/12/cirqb743j0008adlsc47darc7/</url>
       <content type="html"><![CDATA[<p>之前已经在本地搭建了hexo的环境，但是还是需要每次都要在本地生成一下然后再提交到<strong>github</strong>或者<strong>gitcafe</strong>上。固定在一台电脑上写作的问题还不是太大，如果需要在不同电脑甚至不同设备上写的话就没有办法了。</p>
 <p>之前刚好看到<strong>Bandwagon Host</strong>的特价VPS，原来都是用着别人分享的shadowsocks，以防万一，还是自己搞一个比较安全靠谱，顺便也一起搭了一个VPN，方便移动设备使用。</p>
 <p>下面该VPS的详细配置，年付<code>$9.99</code>，相当便宜了。<br><a href="https://bandwagonhost.com/aff.php?aff=1604&amp;pid=22" target="_blank" rel="external">直达链接（我的小尾巴~）</a></p>
@@ -75,7 +75,7 @@
     
     <entry>
       <title><![CDATA[Raneto：用Markdown写作、Nodejs搭建的Wiki]]></title>
-      <url>http://sumw3.com/2014/07/cirqb6b7a000a9alsbu3johnv/</url>
+      <url>http://sumw3.com/2014/07/cirqb74340002adlsdzym9893/</url>
       <content type="html"><![CDATA[<blockquote>
 <p>最近对<strong>Markdown</strong>很感兴趣，刚在Github上搭建了这个站点，用来记录平时的一些技巧心得。但是还有一些属于经常用到的，可以不断套用的东西，用现在这个站来记录的话，查找起来比较麻烦。因此，想找一款能直接<strong>Markdown</strong>记录，用树形结构组织，支持全文检索的Wiki软件。Github上搜了一圈，对比了几个Repo，最终选择<a href="1"><strong>Raneto</strong></a>。</p>
 </blockquote>
@@ -108,7 +108,7 @@
     
     <entry>
       <title><![CDATA[SQL SERVER 2005恢复数据错误（3154）]]></title>
-      <url>http://sumw3.com/2014/07/cirqb6b6h00009alsl0qdncci/</url>
+      <url>http://sumw3.com/2014/07/cirqb742y0000adlscvn43kxo/</url>
       <content type="html"><![CDATA[<p>###问题</p>
 <p>在<strong>SqlServer2005</strong>的<strong>Management studio</strong>里使用<code>bak</code>文件还原数据库的时候总是会发生下面的错误。</p>
 <p><img src="http://images.cnblogs.com/cnblogs_com/adandelion/BACKERROR.GIF" alt="SQL Server restore error"></p>
@@ -132,7 +132,7 @@
     
     <entry>
       <title><![CDATA[开始使用Hexo]]></title>
-      <url>http://sumw3.com/2014/07/cirqb6b6z00069als7s36o0jk/</url>
+      <url>http://sumw3.com/2014/07/cirqb743g0006adlsq9dm3kyi/</url>
       <content type="html"><![CDATA[<p>原来网站是<strong>wordpress</strong>的，用的也是免费空间<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。</p>
 <blockquote>
 <p>关于<strong>000webhost</strong>，注册可能会麻烦一点，需要挂<strong>VPN</strong>或者使用代理，具体方法可自行Google。</p>
