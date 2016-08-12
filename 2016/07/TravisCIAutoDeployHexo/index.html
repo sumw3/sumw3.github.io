@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="markdown,nodejs,hexo,github," />
+  <meta name="keywords" content="hexo,Travis CI," />
 
 
 
@@ -86,28 +86,24 @@
 
 
 
-<meta name="description" content="原来网站是wordpress的，用的也是免费空间000webhost。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐000webhost。
-
-关于000webhost，注册可能会麻烦一点，需要挂VPN或者使用代理，具体方法可自行Google。
-
-初识Hexo一开始只是想用Markdown来写博客，但是wordpre">
+<meta name="description" content="开始之前在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 .travis.yml 的话，请先制作一个新的 .travis.yml 。
+Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。
+1$ ssh-keygen -t rsa -C &amp;q">
 <meta property="og:type" content="article">
-<meta property="og:title" content="开始使用Hexo">
-<meta property="og:url" content="http://sumw3.com/2014/07/cirrayg7y0006mals3oef4qli/index.html">
+<meta property="og:title" content="用 Travis CI 自动部署 Hexo">
+<meta property="og:url" content="http://sumw3.com/2016/07/TravisCIAutoDeployHexo/index.html">
 <meta property="og:site_name" content="Σ">
-<meta property="og:description" content="原来网站是wordpress的，用的也是免费空间000webhost。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐000webhost。
-
-关于000webhost，注册可能会麻烦一点，需要挂VPN或者使用代理，具体方法可自行Google。
-
-初识Hexo一开始只是想用Markdown来写博客，但是wordpre">
-<meta property="og:updated_time" content="2016-08-12T05:15:47.074Z">
+<meta property="og:description" content="开始之前在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 .travis.yml 的话，请先制作一个新的 .travis.yml 。
+Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。
+1$ ssh-keygen -t rsa -C &amp;q">
+<meta property="og:image" content="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png">
+<meta property="og:updated_time" content="2016-07-21T05:55:04.876Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="开始使用Hexo">
-<meta name="twitter:description" content="原来网站是wordpress的，用的也是免费空间000webhost。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐000webhost。
-
-关于000webhost，注册可能会麻烦一点，需要挂VPN或者使用代理，具体方法可自行Google。
-
-初识Hexo一开始只是想用Markdown来写博客，但是wordpre">
+<meta name="twitter:title" content="用 Travis CI 自动部署 Hexo">
+<meta name="twitter:description" content="开始之前在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 .travis.yml 的话，请先制作一个新的 .travis.yml 。
+Deploy Key首先你必须用 ssh-keygen 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。
+1$ ssh-keygen -t rsa -C &amp;q">
+<meta name="twitter:image" content="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png">
 
 
 
@@ -128,9 +124,9 @@
 
 
 
-  <link rel="canonical" href="http://sumw3.com/2014/07/cirrayg7y0006mals3oef4qli/"/>
+  <link rel="canonical" href="http://sumw3.com/2016/07/TravisCIAutoDeployHexo/"/>
 
-  <title> 开始使用Hexo | Σ </title>
+  <title> 用 Travis CI 自动部署 Hexo | Σ </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -283,7 +279,7 @@
             
             
               
-                开始使用Hexo
+                用 Travis CI 自动部署 Hexo
               
             
           </h1>
@@ -295,8 +291,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-07-07T22:23:38-04:00" content="2014-07-08">
-              2014-07-08
+            <time itemprop="dateCreated" datetime="2016-07-21T01:21:38-04:00" content="2016-07-21">
+              2016-07-21
             </time>
           </span>
 
@@ -325,8 +321,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/07/cirrayg7y0006mals3oef4qli/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/07/cirrayg7y0006mals3oef4qli/" itemprop="commentsCount"></span>
+                <a href="/2016/07/TravisCIAutoDeployHexo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/TravisCIAutoDeployHexo/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -349,24 +345,40 @@
       
 
       
-        <p>原来网站是<strong>wordpress</strong>的，用的也是免费空间<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。</p>
+        <h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 <code>.travis.yml</code> 的话，请先制作一个新的 <code>.travis.yml</code> 。</p>
+<h2 id="Deploy-Key"><a href="#Deploy-Key" class="headerlink" title="Deploy Key"></a>Deploy Key</h2><p>首先你必须用 <code>ssh-keygen</code> 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</div></pre></td></tr></table></figure>
+<p>在制作 SSH key 时，请把 passphrase 留空，因为在 Travis 上输入密码很麻烦，我目前还找不到比较简便的方式，如果各位知道的话欢迎提供给我。<br>当 SSH key 制作完成后，复制 Public key 到GitHub上的 Deploy key 字段，如下：</p>
+<p><img src="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/deploy_key.png" alt=""></p>
+<a id="more"></a>
+<h2 id="加密-Private-Key"><a href="#加密-Private-Key" class="headerlink" title="加密 Private Key"></a>加密 Private Key</h2><p>首先，安装 Travis 的命令列工具：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gem install travis</div></pre></td></tr></table></figure>
+<p>在安装完毕后，透过命令列工具登入到 Travis ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis login --auto</div></pre></td></tr></table></figure>
+<p>如此一来，我们就能透过 Travis 提供的命令列工具加密刚刚所制作的 Private key ，并把它上传到 Travis 上供日后使用。</p>
+<p>假设 Private key 的档案名称为 <code>ssh_key</code>，Travis 会加密并产生 <code>ssh_key.enc</code> ，并自动在 <code>.travis.yml</code> 的 <code>before_install</code> 字段中，自动插入解密指令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis encrypt-file ssh_key --add</div></pre></td></tr></table></figure>
+<p>正常来说 Travis 会自动解析目前的 repo 并把 Private key 上传到相对应的 repo ，但有时可能会秀逗，这时你必须在指令后加上 <code>-r</code> 选项来指定 repo 名称，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis encrypt-file ssh_key --add -r hexojs/site</div></pre></td></tr></table></figure>
+<h2 id="设定-travis-yml"><a href="#设定-travis-yml" class="headerlink" title="设定 .travis.yml"></a>设定 <code>.travis.yml</code></h2><p>把刚刚制作的 <code>ssh_key.enc</code> 移至 <code>.travis/ssh_key.enc</code> ，并在 <code>.travis</code> 文件夹中建立 <code>ssh_config</code> 档案，指定 Travis 上的 SSH 设定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Host github.com</div><div class="line">  User git</div><div class="line">  StrictHostKeyChecking no</div><div class="line">  IdentityFile ~/.ssh/id_rsa</div><div class="line">  IdentitiesOnly yes</div></pre></td></tr></table></figure>
+<p>因为刚刚修改了 <code>ssh_key.enc</code> 的位址，所以我们要顺带修改刚刚 Travis 在 <code>.travis.yml</code> 帮我们插入的那条解密指令。请注意，不要照抄这段指令，每个人的环境变数都不一样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- openssl aes-256-cbc -K $encrypted_06b8e90ac19b_key -iv $encrypted_06b8e90ac19b_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d</div></pre></td></tr></table></figure>
+<p>这条指令会利用 openssl 解密 Private key ，并把解密后的档案存放在 <code>~/.ssh/id_rsa</code> ，接着指定这个档案的权限：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- chmod 600 ~/.ssh/id_rsa</div></pre></td></tr></table></figure>
+<p>然后，把 Private key 加入到系统中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- eval $（ssh-agent）</div><div class="line">- ssh-add ~/.ssh/id_rsa</div></pre></td></tr></table></figure>
+<p>记得刚刚我们制作的 <code>ssh_config</code> 档案吗？别忘了把他复制到 <code>~/.ssh</code> 文件夹：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- cp .travis/ssh_config ~/.ssh/config</div></pre></td></tr></table></figure>
+<p>为了让 git 操作能顺利进行，我们必须先设定 git 的使用者信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- git config --global user.name“Tommy Chen”</div><div class="line">- git config --global user.email tommy351@gmail.com</div></pre></td></tr></table></figure>
+<p>最后的结果可能如下，如果你和我一样使用 Hexo 的话可以参考看看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">language: node_js</div><div class="line"></div><div class="line">node_js:</div><div class="line">  - &quot;0.10&quot;</div><div class="line"></div><div class="line">before_install:</div><div class="line">  # Decrypt the private key</div><div class="line">  - openssl aes-256-cbc -K $encrypted_06b8e90ac19b_key -iv $encrypted_06b8e90ac19b_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d</div><div class="line">  # Set the permission of the key</div><div class="line">  - chmod 600 ~/.ssh/id_rsa</div><div class="line">  # Start SSH agent</div><div class="line">  - eval $(ssh-agent)</div><div class="line">  # Add the private key to the system</div><div class="line">  - ssh-add ~/.ssh/id_rsa</div><div class="line">  # Copy SSH config</div><div class="line">  - cp .travis/ssh_config ~/.ssh/config</div><div class="line">  # Set Git config</div><div class="line">  - git config --global user.name &quot;Tommy Chen&quot;</div><div class="line">  - git config --global user.email tommy351@gmail.com</div><div class="line">  # Install Hexo</div><div class="line">  - npm install hexo@beta -g</div><div class="line">  # Clone the repository</div><div class="line">  - git clone https://github.com/hexojs/hexojs.github.io .deploy</div><div class="line"></div><div class="line">script:</div><div class="line">  - hexo generate</div><div class="line">  - hexo deploy</div><div class="line"></div><div class="line">branches:</div><div class="line">  only:</div><div class="line">    - master</div></pre></td></tr></table></figure>
+<hr>
 <blockquote>
-<p>关于<strong>000webhost</strong>，注册可能会麻烦一点，需要挂<strong>VPN</strong>或者使用代理，具体方法可自行Google。</p>
+<p>引用：<a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">用 Travis CI 自動部署網站到 GitHub</a></p>
+<p>其他 <a href="https://github.com/51offer/51offer.github.com/blob/blog/.travis.yml" target="_blank" rel="external"><code>.travis.yml</code></a> 参考 </p>
 </blockquote>
-<h3 id="初识Hexo"><a href="#初识Hexo" class="headerlink" title="初识Hexo"></a>初识Hexo</h3><p>一开始只是想用<strong>Markdown</strong>来写博客，但是<strong>wordpress</strong>本身对<strong>Markdown</strong>还不能支持，试了几个插件，效果都不是那么理想，在线编辑也都不支持预览，这对于一个<strong>Markdown</strong>新手来说，很不放心。</p>
-<p>最近逛<strong>v2ex</strong>的时候也经常看到<strong>Github</strong>上搭建的静态博客。作为一个业余码农，博客更多的是记录一些平常碰到的技术问题和自己的一些学习心得，所以一个能够专注于文字和代码的<strong>Markdown</strong>加上<strong>Github</strong>这个无限免费的平台，非常有吸引力。</p>
-<p>在<strong>Github</strong>上发布博客的工具也不少，目前最流行<strong>jekyll</strong>和<strong>octopress</strong>，但都是基于Ruby的，而<strong>Hexo</strong>是基于<strong>nodejs</strong>，<br>且生成速度更快，所以毫不犹豫的选择了<strong>Hexo</strong>。<br><a id="more"></a></p>
-<h3 id="在Windows和Mac上安装Hexo"><a href="#在Windows和Mac上安装Hexo" class="headerlink" title="在Windows和Mac上安装Hexo"></a>在Windows和Mac上安装Hexo</h3><p>原来机器上就已经有<strong>nodejs</strong>、<strong>git</strong>环境了，所以安装<strong>Hexo</strong>就非常简单，一句代码就搞定了。<br><code>npm install hexo -g</code></p>
-<p>然后就按照<a href="http://hexo.io/docs/" target="_blank" rel="external"><strong>官网设置手册</strong></a>一步步设置就行，非常简单，并且网上资料也很多，随便一个问题都能Google到答案。</p>
-<h3 id="配置Hexo"><a href="#配置Hexo" class="headerlink" title="配置Hexo"></a>配置Hexo</h3><p>初识情况下<strong>Hexo</strong>就能非常完美的运行了，当然，作为中文用户来说，首先设置一下语言选项：<br><code>language: zh-CN</code><br>日期格式原来英文的，不太适应，也顺便改了一下：<br><code>date_format: YYYY-MM-D</code><br>剩下的就默认，最后安装了下面两个插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&quot;hexo-generator-feed&quot;: &quot;^0.1.2&quot;,  </div><div class="line">&quot;hexo-generator-sitemap&quot;: &quot;~0.1.4&quot;</div></pre></td></tr></table></figure></p>
-<p>主题的话，官方也提供了很多，<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="external">https://github.com/hexojs/hexo/wiki/Themes</a>，选择一个合适的，然后稍做修改即可。</p>
-<p>我把整个文件夹<code>Github Page</code>也作为一个<code>Repo</code>同步了，这样的话不管是<strong>Windows</strong>上面还是<strong>Mac</strong>上面都可以同步修改了，比较方便。</p>
-<blockquote>
-<p>当然利用各种云盘同步也不错，我懒得装客户端了，就直接<strong>Git</strong>了。</p>
-</blockquote>
-<h3 id="问题点"><a href="#问题点" class="headerlink" title="问题点"></a>问题点</h3><p>目前觉得最麻烦的还是每次发布必须在电脑上执行一下<code>hexo d</code>，用其他电脑想发布新内容的话会比较麻烦，更不用说移动设备了。</p>
-<p>下一步准备弄个<strong>VPS</strong>，把<strong>Hexo</strong>部署在上面，然后用同步盘同步到<strong>VPS</strong>后定时执行<code>hexo g</code>、<code>hexo d</code>应该就可以了吧。</p>
-<p>目前就这么多内容，下次想到什么再补充吧。</p>
 
       
     </div>
@@ -389,13 +401,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/markdown/" rel="tag">#markdown</a>
-          
-            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
-          
             <a href="/tags/hexo/" rel="tag">#hexo</a>
           
-            <a href="/tags/github/" rel="tag">#github</a>
+            <a href="/tags/Travis-CI/" rel="tag">#Travis CI</a>
           
         </div>
       
@@ -404,13 +412,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2014/12/HexoAutoDeploy/" rel="next" title="通过VPS自动发布HEXO">
+                <i class="fa fa-chevron-left"></i> 通过VPS自动发布HEXO
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2014/07/cirrayg7h0000malstcjae87w/" rel="prev" title="SQL SERVER 2005恢复数据错误（3154）">
-                SQL SERVER 2005恢复数据错误（3154） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -436,8 +444,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2014/07/cirrayg7y0006mals3oef4qli/"
-           data-title="开始使用Hexo" data-url="http://sumw3.com/2014/07/cirrayg7y0006mals3oef4qli/">
+      <div class="ds-thread" data-thread-key="2016/07/TravisCIAutoDeployHexo/"
+           data-title="用 Travis CI 自动部署 Hexo" data-url="http://sumw3.com/2016/07/TravisCIAutoDeployHexo/">
       </div>
     
   </div>
@@ -555,7 +563,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#初识Hexo"><span class="nav-number">1.</span> <span class="nav-text">初识Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在Windows和Mac上安装Hexo"><span class="nav-number">2.</span> <span class="nav-text">在Windows和Mac上安装Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Hexo"><span class="nav-number">3.</span> <span class="nav-text">配置Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题点"><span class="nav-number">4.</span> <span class="nav-text">问题点</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开始之前"><span class="nav-number">1.</span> <span class="nav-text">开始之前</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deploy-Key"><span class="nav-number">2.</span> <span class="nav-text">Deploy Key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加密-Private-Key"><span class="nav-number">3.</span> <span class="nav-text">加密 Private Key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设定-travis-yml"><span class="nav-number">4.</span> <span class="nav-text">设定 .travis.yml</span></a></li></ol></div>
             
           </div>
         </section>

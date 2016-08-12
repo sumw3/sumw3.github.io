@@ -17,8 +17,8 @@
   
   <entry>
     <title>用 Travis CI 自动部署 Hexo</title>
-    <link href="http://sumw3.com/2016/07/cirrayg87000amalssmcrb5if/"/>
-    <id>http://sumw3.com/2016/07/cirrayg87000amalssmcrb5if/</id>
+    <link href="http://sumw3.com/2016/07/TravisCIAutoDeployHexo/"/>
+    <id>http://sumw3.com/2016/07/TravisCIAutoDeployHexo/</id>
     <published>2016-07-21T05:21:38.000Z</published>
     <updated>2016-07-21T05:55:04.876Z</updated>
     
@@ -79,8 +79,8 @@
   
   <entry>
     <title>通过VPS自动发布HEXO</title>
-    <link href="http://sumw3.com/2014/12/cirrayg800008mals5ytvng8z/"/>
-    <id>http://sumw3.com/2014/12/cirrayg800008mals5ytvng8z/</id>
+    <link href="http://sumw3.com/2014/12/HexoAutoDeploy/"/>
+    <id>http://sumw3.com/2014/12/HexoAutoDeploy/</id>
     <published>2014-12-31T05:00:00.000Z</published>
     <updated>2016-07-19T05:52:59.229Z</updated>
     
@@ -135,8 +135,8 @@
   
   <entry>
     <title>Raneto：用Markdown写作、Nodejs搭建的Wiki</title>
-    <link href="http://sumw3.com/2014/07/cirrayg7n0002malsxcmb3hbo/"/>
-    <id>http://sumw3.com/2014/07/cirrayg7n0002malsxcmb3hbo/</id>
+    <link href="http://sumw3.com/2014/07/20140711-RanetoANodejsWiki/"/>
+    <id>http://sumw3.com/2014/07/20140711-RanetoANodejsWiki/</id>
     <published>2014-07-11T06:30:02.000Z</published>
     <updated>2016-07-19T05:52:59.229Z</updated>
     
@@ -206,8 +206,8 @@
   
   <entry>
     <title>SQL SERVER 2005恢复数据错误（3154）</title>
-    <link href="http://sumw3.com/2014/07/cirrayg7h0000malstcjae87w/"/>
-    <id>http://sumw3.com/2014/07/cirrayg7h0000malstcjae87w/</id>
+    <link href="http://sumw3.com/2014/07/20140709-3154ErrorOfSqlServer/"/>
+    <id>http://sumw3.com/2014/07/20140709-3154ErrorOfSqlServer/</id>
     <published>2014-07-09T12:18:31.000Z</published>
     <updated>2016-08-11T12:55:43.971Z</updated>
     
@@ -248,8 +248,8 @@
   
   <entry>
     <title>开始使用Hexo</title>
-    <link href="http://sumw3.com/2014/07/cirrayg7y0006mals3oef4qli/"/>
-    <id>http://sumw3.com/2014/07/cirrayg7y0006mals3oef4qli/</id>
+    <link href="http://sumw3.com/2014/07/Hexo-started/"/>
+    <id>http://sumw3.com/2014/07/Hexo-started/</id>
     <published>2014-07-08T02:23:38.000Z</published>
     <updated>2016-08-12T05:15:47.074Z</updated>
     
