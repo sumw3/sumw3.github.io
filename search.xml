@@ -5,7 +5,7 @@
     
     <entry>
       <title><![CDATA[用 Travis CI 自动部署 Hexo]]></title>
-      <url>http://sumw3.com/2016/07/cirqb743r000aadlscllbluby/</url>
+      <url>http://sumw3.com/2016/07/cirrayg87000amalssmcrb5if/</url>
       <content type="html"><![CDATA[<h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 <code>.travis.yml</code> 的话，请先制作一个新的 <code>.travis.yml</code> 。</p>
 <h2 id="Deploy-Key"><a href="#Deploy-Key" class="headerlink" title="Deploy Key"></a>Deploy Key</h2><p>首先你必须用 <code>ssh-keygen</code> 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</div></pre></td></tr></table></figure>
@@ -45,7 +45,7 @@
     
     <entry>
       <title><![CDATA[通过VPS自动发布HEXO]]></title>
-      <url>http://sumw3.com/2014/12/cirqb743j0008adlsc47darc7/</url>
+      <url>http://sumw3.com/2014/12/cirrayg800008mals5ytvng8z/</url>
       <content type="html"><![CDATA[<p>之前已经在本地搭建了hexo的环境，但是还是需要每次都要在本地生成一下然后再提交到<strong>github</strong>或者<strong>gitcafe</strong>上。固定在一台电脑上写作的问题还不是太大，如果需要在不同电脑甚至不同设备上写的话就没有办法了。</p>
 <p>之前刚好看到<strong>Bandwagon Host</strong>的特价VPS，原来都是用着别人分享的shadowsocks，以防万一，还是自己搞一个比较安全靠谱，顺便也一起搭了一个VPN，方便移动设备使用。</p>
 <p>下面该VPS的详细配置，年付<code>$9.99</code>，相当便宜了。<br><a href="https://bandwagonhost.com/aff.php?aff=1604&amp;pid=22" target="_blank" rel="external">直达链接（我的小尾巴~）</a></p>
@@ -75,7 +75,7 @@
     
     <entry>
       <title><![CDATA[Raneto：用Markdown写作、Nodejs搭建的Wiki]]></title>
-      <url>http://sumw3.com/2014/07/cirqb74340002adlsdzym9893/</url>
+      <url>http://sumw3.com/2014/07/cirrayg7n0002malsxcmb3hbo/</url>
       <content type="html"><![CDATA[<blockquote>
 <p>最近对<strong>Markdown</strong>很感兴趣，刚在Github上搭建了这个站点，用来记录平时的一些技巧心得。但是还有一些属于经常用到的，可以不断套用的东西，用现在这个站来记录的话，查找起来比较麻烦。因此，想找一款能直接<strong>Markdown</strong>记录，用树形结构组织，支持全文检索的Wiki软件。Github上搜了一圈，对比了几个Repo，最终选择<a href="1"><strong>Raneto</strong></a>。</p>
 </blockquote>
@@ -108,7 +108,7 @@
     
     <entry>
       <title><![CDATA[SQL SERVER 2005恢复数据错误（3154）]]></title>
-      <url>http://sumw3.com/2014/07/cirqb742y0000adlscvn43kxo/</url>
+      <url>http://sumw3.com/2014/07/cirrayg7h0000malstcjae87w/</url>
       <content type="html"><![CDATA[<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>在<strong>SqlServer2005</strong>的<strong>Management studio</strong>里使用<code>bak</code>文件还原数据库的时候总是会发生下面的错误。</p>
 <p><img src="http://ww1.sinaimg.cn/large/68f944b2gw1f6q3o9np43j20jj0hlwi7.jpg" alt="SQL Server restore error"></p>
 <blockquote>
@@ -128,27 +128,23 @@
     
     <entry>
       <title><![CDATA[开始使用Hexo]]></title>
-      <url>http://sumw3.com/2014/07/cirqb743g0006adlsq9dm3kyi/</url>
+      <url>http://sumw3.com/2014/07/cirrayg7y0006mals3oef4qli/</url>
       <content type="html"><![CDATA[<p>原来网站是<strong>wordpress</strong>的，用的也是免费空间<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。</p>
 <blockquote>
 <p>关于<strong>000webhost</strong>，注册可能会麻烦一点，需要挂<strong>VPN</strong>或者使用代理，具体方法可自行Google。</p>
 </blockquote>
-<p>###初识Hexo</p>
-<p>一开始只是想用<strong>Markdown</strong>来写博客，但是<strong>wordpress</strong>本身对<strong>Markdown</strong>还不能支持，试了几个插件，效果都不是那么理想，在线编辑也都不支持预览，这对于一个<strong>Markdown</strong>新手来说，很不放心。</p>
+<h3 id="初识Hexo"><a href="#初识Hexo" class="headerlink" title="初识Hexo"></a>初识Hexo</h3><p>一开始只是想用<strong>Markdown</strong>来写博客，但是<strong>wordpress</strong>本身对<strong>Markdown</strong>还不能支持，试了几个插件，效果都不是那么理想，在线编辑也都不支持预览，这对于一个<strong>Markdown</strong>新手来说，很不放心。</p>
 <p>最近逛<strong>v2ex</strong>的时候也经常看到<strong>Github</strong>上搭建的静态博客。作为一个业余码农，博客更多的是记录一些平常碰到的技术问题和自己的一些学习心得，所以一个能够专注于文字和代码的<strong>Markdown</strong>加上<strong>Github</strong>这个无限免费的平台，非常有吸引力。</p>
 <p>在<strong>Github</strong>上发布博客的工具也不少，目前最流行<strong>jekyll</strong>和<strong>octopress</strong>，但都是基于Ruby的，而<strong>Hexo</strong>是基于<strong>nodejs</strong>，<br>且生成速度更快，所以毫不犹豫的选择了<strong>Hexo</strong>。<br><a id="more"></a></p>
-<p>###在Windows和Mac上安装Hexo</p>
-<p>原来机器上就已经有<strong>nodejs</strong>、<strong>git</strong>环境了，所以安装<strong>Hexo</strong>就非常简单，一句代码就搞定了。<br><code>npm install hexo -g</code></p>
+<h3 id="在Windows和Mac上安装Hexo"><a href="#在Windows和Mac上安装Hexo" class="headerlink" title="在Windows和Mac上安装Hexo"></a>在Windows和Mac上安装Hexo</h3><p>原来机器上就已经有<strong>nodejs</strong>、<strong>git</strong>环境了，所以安装<strong>Hexo</strong>就非常简单，一句代码就搞定了。<br><code>npm install hexo -g</code></p>
 <p>然后就按照<a href="http://hexo.io/docs/" target="_blank" rel="external"><strong>官网设置手册</strong></a>一步步设置就行，非常简单，并且网上资料也很多，随便一个问题都能Google到答案。</p>
-<p>###配置Hexo</p>
-<p>初识情况下<strong>Hexo</strong>就能非常完美的运行了，当然，作为中文用户来说，首先设置一下语言选项：<br><code>language: zh-CN</code><br>日期格式原来英文的，不太适应，也顺便改了一下：<br><code>date_format: YYYY-MM-D</code><br>剩下的就默认，最后安装了下面两个插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&quot;hexo-generator-feed&quot;: &quot;^0.1.2&quot;,  </div><div class="line">&quot;hexo-generator-sitemap&quot;: &quot;~0.1.4&quot;</div></pre></td></tr></table></figure></p>
+<h3 id="配置Hexo"><a href="#配置Hexo" class="headerlink" title="配置Hexo"></a>配置Hexo</h3><p>初识情况下<strong>Hexo</strong>就能非常完美的运行了，当然，作为中文用户来说，首先设置一下语言选项：<br><code>language: zh-CN</code><br>日期格式原来英文的，不太适应，也顺便改了一下：<br><code>date_format: YYYY-MM-D</code><br>剩下的就默认，最后安装了下面两个插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&quot;hexo-generator-feed&quot;: &quot;^0.1.2&quot;,  </div><div class="line">&quot;hexo-generator-sitemap&quot;: &quot;~0.1.4&quot;</div></pre></td></tr></table></figure></p>
 <p>主题的话，官方也提供了很多，<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="external">https://github.com/hexojs/hexo/wiki/Themes</a>，选择一个合适的，然后稍做修改即可。</p>
 <p>我把整个文件夹<code>Github Page</code>也作为一个<code>Repo</code>同步了，这样的话不管是<strong>Windows</strong>上面还是<strong>Mac</strong>上面都可以同步修改了，比较方便。</p>
 <blockquote>
 <p>当然利用各种云盘同步也不错，我懒得装客户端了，就直接<strong>Git</strong>了。</p>
 </blockquote>
-<p>###问题点</p>
-<p>目前觉得最麻烦的还是每次发布必须在电脑上执行一下<code>hexo d</code>，用其他电脑想发布新内容的话会比较麻烦，更不用说移动设备了。</p>
+<h3 id="问题点"><a href="#问题点" class="headerlink" title="问题点"></a>问题点</h3><p>目前觉得最麻烦的还是每次发布必须在电脑上执行一下<code>hexo d</code>，用其他电脑想发布新内容的话会比较麻烦，更不用说移动设备了。</p>
 <p>下一步准备弄个<strong>VPS</strong>，把<strong>Hexo</strong>部署在上面，然后用同步盘同步到<strong>VPS</strong>后定时执行<code>hexo g</code>、<code>hexo d</code>应该就可以了吧。</p>
 <p>目前就这么多内容，下次想到什么再补充吧。</p>
 ]]></content>
