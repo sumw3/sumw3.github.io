@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sumw3.com/"/>
-  <updated>2016-07-21T05:55:04.876Z</updated>
+  <updated>2017-04-15T08:53:35.523Z</updated>
   <id>http://sumw3.com/</id>
   
   <author>
@@ -14,6 +14,66 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>OpenVZ 开启 BBR 方法</title>
+    <link href="http://sumw3.com/2017/04/bbrOnOpenVZ/"/>
+    <id>http://sumw3.com/2017/04/bbrOnOpenVZ/</id>
+    <published>2017-04-15T07:59:30.000Z</published>
+    <updated>2017-04-15T08:53:35.523Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>BBR，是一个TCP加速优化工具，类似于锐速，可用于优化 TCP 连接。</p>
+<blockquote>
+<p>GitHub 地址为：<a href="https://github.com/google/bbr" target="_blank" rel="external">https://github.com/google/bbr</a></p>
+</blockquote>
+<p>仔细看了看，GitHub 主页上有明确的说明“This is not an official Google product.” 说明这其实不是 Google 的官方项目，但是是在 Google 的 GitHub 上，比较奇怪。</p>
+<p>要想启用 BBR 需要切换内核，所以必须要 KVM 或者 XEN 架构的 VPS。这点和锐速一致，所以 OpenVZ 的朋友是用不了的。由于需要跟换内核，属于危险操作，请不要用于生产环境，可能会造成无法开机，切记！<br>至于加速效果，有人反馈比锐速好，有人反馈比锐速弱。我测试后感觉效果还是不错的，但是用起来比破解版锐速放心一些吧，它是内置到最新的内核里边了。</p>
+<p>虽说 OpenVZ 在正常情况下是无法使用 BBR 的，但是通过其他一些手段还是能够达到目的。</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="1-VPS-的-Panel-里打开-TUN-TAP-功能"><a href="#1-VPS-的-Panel-里打开-TUN-TAP-功能" class="headerlink" title="1. VPS 的 Panel 里打开 TUN/TAP 功能"></a>1. VPS 的 Panel 里打开 TUN/TAP 功能</h3><h3 id="2-创建一个-tap0"><a href="#2-创建一个-tap0" class="headerlink" title="2. 创建一个 tap0"></a>2. 创建一个 tap0</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ip tuntap add tap0 mode tap</div><div class="line">ip addr add 10.0.0.1/24 dev tap0</div><div class="line">ip link set tap0 up</div></pre></td></tr></table></figure>
+<h3 id="3-打通-tap0-和-host-之间的网络"><a href="#3-打通-tap0-和-host-之间的网络" class="headerlink" title="3. 打通 tap0 和 host 之间的网络"></a>3. 打通 tap0 和 host 之间的网络</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">iptables -P FORWARD ACCEPT</div><div class="line">iptables -t nat -A POSTROUTING -o venet0 -j MASQUERADE</div></pre></td></tr></table></figure>
+<h3 id="4-在-443-端口开启-BBR"><a href="#4-在-443-端口开启-BBR" class="headerlink" title="4. 在 443 端口开启 BBR"></a>4. 在 443 端口开启 BBR</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A PREROUTING -i venet0 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.2</div></pre></td></tr></table></figure>
+<h3 id="5-安装-haproxy-，并禁止开机自启"><a href="#5-安装-haproxy-，并禁止开机自启" class="headerlink" title="5. 安装 haproxy ，并禁止开机自启"></a>5. 安装 haproxy ，并禁止开机自启</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get install haproxy</div><div class="line">update-rc.d haproxy disable</div></pre></td></tr></table></figure>
+<h3 id="6-配置-haproxy"><a href="#6-配置-haproxy" class="headerlink" title="6. 配置 haproxy"></a>6. 配置 haproxy</h3><p>新建一个 <code>/root/haproxy/haproxy.cfg</code></p>
+<blockquote>
+<p>假设你原来的 server 监听的是 12580 端口， BBR 的端口开在 443</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">global</div><div class="line">user haproxy</div><div class="line">group haproxy</div><div class="line">defaults</div><div class="line">mode tcp</div><div class="line">timeout connect 5s</div><div class="line">timeout client 60s</div><div class="line">timeout server 60s</div><div class="line"></div><div class="line">listen shadowsocks</div><div class="line">bind 10.0.0.2:443</div><div class="line">server server1 10.0.0.1:12580</div></pre></td></tr></table></figure>
+<h3 id="7-下载-Linux-Kernel-Library-，解压"><a href="#7-下载-Linux-Kernel-Library-，解压" class="headerlink" title="7. 下载 Linux Kernel Library ，解压"></a>7. 下载 Linux Kernel Library ，解压</h3><p>从以下地址下载 LKL，并解压至 <code>/root/haproxy</code>。</p>
+<blockquote>
+<p><a href="https://drive.google.com/file/d/0ByqeeKN198fcdDVLMmVKakl5VE0/view?usp=sharing" target="_blank" rel="external">https://drive.google.com/file/d/0ByqeeKN198fcdDVLMmVKakl5VE0/view?usp=sharing</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -xzvf liblkl-hijack.so.tgz</div></pre></td></tr></table></figure>
+<h3 id="8-开启-haproxy-为-BBR-过桥"><a href="#8-开启-haproxy-为-BBR-过桥" class="headerlink" title="8. 开启 haproxy 为 BBR 过桥"></a>8. 开启 haproxy 为 BBR 过桥</h3><p>以下命令必须一行打完</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LD_PRELOAD=/root/haproxy/liblkl-hijack.so LKL_HIJACK_NET_QDISC=&quot;root|fq&quot; LKL_HIJACK_SYSCTL=&quot;net.ipv4.tcp_congestion_control=bbr;net.ipv4.tcp_wmem=4096 65536 67108864&quot; LKL_HIJACK_NET_IFTYPE=tap LKL_HIJACK_NET_IFPARAMS=tap0 LKL_HIJACK_NET_IP=10.0.0.2 LKL_HIJACK_NET_NETMASK_LEN=24 LKL_HIJACK_NET_GATEWAY=10.0.0.1 LKL_HIJACK_OFFLOAD=&quot;0x8883&quot; haproxy -f /root/haproxy/haproxy.cfg</div></pre></td></tr></table></figure>
+<h2 id="大功告成"><a href="#大功告成" class="headerlink" title="大功告成"></a>大功告成</h2><p>现在可以用客户端连上试试看了 </p>
+<p>12580 是原来 server 的端口 </p>
+<p>443 是开启 BBR 以后的端口</p>
+<h2 id="设置开机脚本"><a href="#设置开机脚本" class="headerlink" title="设置开机脚本"></a>设置开机脚本</h2><h3 id="1-安装-supervisor"><a href="#1-安装-supervisor" class="headerlink" title="1. 安装 supervisor"></a>1. 安装 supervisor</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install supervisor</div></pre></td></tr></table></figure>
+<h3 id="2-添加配置文件，用于开机自启"><a href="#2-添加配置文件，用于开机自启" class="headerlink" title="2. 添加配置文件，用于开机自启"></a>2. 添加配置文件，用于开机自启</h3><p>在目录 <code>/etc/supervisor/conf.d</code> 中增加配置文件 <code>haproxy-lkl.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[program:haproxy-lkl] </div><div class="line">command=/root/haproxy/haproxy-lkl-start.sh</div><div class="line">autostart=true </div><div class="line">autorestart=true </div><div class="line">redirect_stderr=true </div><div class="line">stdout_logfile=/root/haproxy/haproxy-lkl_stdout.log </div><div class="line">stdout_logfile_maxbytes=1MB </div><div class="line">stderr_logfile=/root/haproxy/haproxy-lkl_stderr.log </div><div class="line">stderr_logfile_maxbytes=1MB</div></pre></td></tr></table></figure>
+<h3 id="3-为haproxy-配-Linux-Kernel-Library-的启动脚本"><a href="#3-为haproxy-配-Linux-Kernel-Library-的启动脚本" class="headerlink" title="3. 为haproxy 配 Linux Kernel Library 的启动脚本"></a>3. 为haproxy 配 Linux Kernel Library 的启动脚本</h3><p>在目录 <code>/root/haproxy</code> 中增加启动脚本 <code>haproxy-lkl-start.sh</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">#!/bin/sh </div><div class="line"></div><div class="line">ip tuntap add tap0 mode tap </div><div class="line">ip addr add 10.0.0.1/24 dev tap0 </div><div class="line">ip link set tap0 up </div><div class="line"></div><div class="line">iptables -P FORWARD ACCEPT </div><div class="line"></div><div class="line">iptables -t nat -D PREROUTING -i venet0 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.2 </div><div class="line">iptables -t nat -A PREROUTING -i venet0 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.2 </div><div class="line"></div><div class="line">iptables -t nat -D PREROUTING -i venet0 -p udp --dport 443 -j REDIRECT --to-port 12580 </div><div class="line">iptables -t nat -A PREROUTING -i venet0 -p udp --dport 443 -j REDIRECT --to-port 12580 </div><div class="line"></div><div class="line">export LD_PRELOAD=/root/haproxy/liblkl-hijack.so </div><div class="line">export LKL_HIJACK_NET_QDISC=&quot;root|fq&quot; </div><div class="line">export LKL_HIJACK_SYSCTL=&quot;net.ipv4.tcp_congestion_control=bbr;net.ipv4.tcp_wmem=4096 65536 67108864&quot; </div><div class="line">export LKL_HIJACK_NET_IFTYPE=tap </div><div class="line">export LKL_HIJACK_NET_IFPARAMS=tap0 </div><div class="line">export LKL_HIJACK_NET_IP=10.0.0.2 </div><div class="line">export LKL_HIJACK_NET_NETMASK_LEN=24 </div><div class="line">export LKL_HIJACK_NET_GATEWAY=10.0.0.1 </div><div class="line">export LKL_HIJACK_OFFLOAD=&quot;0x8883&quot; </div><div class="line">export LKL_HIJACK_DEBUG=1 </div><div class="line"></div><div class="line">haproxy -f /root/haproxy/haproxy.cfg</div></pre></td></tr></table></figure>
+<h3 id="4-重启验证"><a href="#4-重启验证" class="headerlink" title="4. 重启验证"></a>4. 重启验证</h3><blockquote>
+<p>参考来源：<a href="https://www.v2ex.com/t/353778" target="_blank" rel="external">https://www.v2ex.com/t/353778</a></p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;开始之前&quot;&gt;&lt;a href=&quot;#开始之前&quot; class=&quot;headerlink&quot; title=&quot;开始之前&quot;&gt;&lt;/a&gt;开始之前&lt;/h2&gt;&lt;p&gt;BBR，是一个TCP加速优化工具，类似于锐速，可用于优化 TCP 连接。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;GitHu
+    
+    </summary>
+    
+      <category term="OpenProjects" scheme="http://sumw3.com/categories/OpenProjects/"/>
+    
+    
+      <category term="vps" scheme="http://sumw3.com/tags/vps/"/>
+    
+      <category term="shadowsocks" scheme="http://sumw3.com/tags/shadowsocks/"/>
+    
+  </entry>
   
   <entry>
     <title>用 Travis CI 自动部署 Hexo</title>
