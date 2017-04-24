@@ -85,7 +85,7 @@
     <link href="http://sumw3.com/2016/07/TravisCIAutoDeployHexo/"/>
     <id>http://sumw3.com/2016/07/TravisCIAutoDeployHexo/</id>
     <published>2016-07-21T05:21:38.000Z</published>
-    <updated>2016-07-21T05:55:04.876Z</updated>
+    <updated>2016-07-21T05:55:04.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 <code>.travis.yml</code> 的话，请先制作一个新的 <code>.travis.yml</code> 。</p>
 <h2 id="Deploy-Key"><a href="#Deploy-Key" class="headerlink" title="Deploy Key"></a>Deploy Key</h2><p>首先你必须用 <code>ssh-keygen</code> 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。</p>
@@ -147,7 +147,7 @@
     <link href="http://sumw3.com/2014/12/HexoAutoDeploy/"/>
     <id>http://sumw3.com/2014/12/HexoAutoDeploy/</id>
     <published>2014-12-31T05:00:00.000Z</published>
-    <updated>2016-07-19T05:52:59.229Z</updated>
+    <updated>2017-04-24T06:29:27.904Z</updated>
     
     <content type="html"><![CDATA[<p>之前已经在本地搭建了hexo的环境，但是还是需要每次都要在本地生成一下然后再提交到<strong>github</strong>或者<strong>gitcafe</strong>上。固定在一台电脑上写作的问题还不是太大，如果需要在不同电脑甚至不同设备上写的话就没有办法了。</p>
 <p>之前刚好看到<strong>Bandwagon Host</strong>的特价VPS，原来都是用着别人分享的shadowsocks，以防万一，还是自己搞一个比较安全靠谱，顺便也一起搭了一个VPN，方便移动设备使用。</p>
@@ -155,7 +155,7 @@
 <blockquote>
 <p><strong>Basic VPS - Unmanaged - 5G PROMO V2</strong><br>Unmanaged service HDD: 5 GB SSD RAM: 512 MB CPU: 1x Intel Xeon BW: 500 GB/mo Link speed: 1 Gigabit VPS technology: OpenVZ/KiwiVM Linux OS: 32-bit and 64-bit Centos, Debian, Ubuntu, Fedora Instant OS reload 1 Dedicated IPv4 address Full root access PPP and VPN support (tun/tap) Instant RDNS update from control panel No contract, anytime cancellation Strictly unmanaged, no support 99% uptime guarantee 30-day money back guarantee</p>
 </blockquote>
-<p>既然有了VPS，那我就可以把hexo的生成和发布都扔到上面去，只要我有新的markdown文件，自动通知VPS让其执行对应的同步、生成和发布即可。<br><img src="http://pubshare.qiniudn.com/sumw3hexo%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83.png" alt="脑图"></p>
+<p>既然有了VPS，那我就可以把hexo的生成和发布都扔到上面去，只要我有新的markdown文件，自动通知VPS让其执行对应的同步、生成和发布即可。<br><img src="https://ws1.sinaimg.cn/large/68f944b2gy1fexr0cdncwj20qa08igmk.jpg" alt="脑图"></p>
 <a id="more"></a>
 <p>###GIT@OSC通知VPS更新<br>前面两步都没什么问题，主要是第三步，怎么让VPS知道我们已经更新的markdown文件并执行后续操作。</p>
 <p>对比几个国内的代码托管网站，最终我选择了<em>开源中国</em>的GIT（<strong>GIT@OSC</strong>），这也是我平常用得最多的代码托管网站。<strong>GIT@OSC</strong>提供了了一个非常好用的功能：<em>PUSH钩子</em>。<br><img src="http://pubshare.qiniudn.com/sumw3%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202014-12-31%20%E4%B8%8B%E5%8D%882.04.21.png" alt="PUSH钩子"><br>只要在钩子地址中填入对应的服务器地址，每次<strong>GIT@OSC</strong>收到新的<strong>PUSH</strong>的时候都会自动发一个<strong>POST</strong>请求至该地址，内容为该次<strong>PUSH</strong>的具体信息及<strong>PUSH钩子</strong>中设置的密码。</p>
@@ -183,7 +183,7 @@
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Basic VPS - Unmanaged - 5G PROMO V2&lt;/strong&gt;&lt;br&gt;Unmanaged service HDD: 5 GB SSD RAM: 512 MB CPU: 1x Intel Xeon BW: 500 GB/mo Link speed: 1 Gigabit VPS technology: OpenVZ/KiwiVM Linux OS: 32-bit and 64-bit Centos, Debian, Ubuntu, Fedora Instant OS reload 1 Dedicated IPv4 address Full root access PPP and VPN support (tun/tap) Instant RDNS update from control panel No contract, anytime cancellation Strictly unmanaged, no support 99% uptime guarantee 30-day money back guarantee&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;既然有了VPS，那我就可以把hexo的生成和发布都扔到上面去，只要我有新的markdown文件，自动通知VPS让其执行对应的同步、生成和发布即可。&lt;br&gt;&lt;img src=&quot;http://pubshare.qiniudn.com/sumw3hexo%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83.png&quot; alt=&quot;脑图&quot;&gt;&lt;/p&gt;
+&lt;p&gt;既然有了VPS，那我就可以把hexo的生成和发布都扔到上面去，只要我有新的markdown文件，自动通知VPS让其执行对应的同步、生成和发布即可。&lt;br&gt;&lt;img src=&quot;https://ws1.sinaimg.cn/large/68f944b2gy1fexr0cdncwj20qa08igmk.jpg&quot; alt=&quot;脑图&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -203,7 +203,7 @@
     <link href="http://sumw3.com/2014/07/20140711-RanetoANodejsWiki/"/>
     <id>http://sumw3.com/2014/07/20140711-RanetoANodejsWiki/</id>
     <published>2014-07-11T06:30:02.000Z</published>
-    <updated>2016-07-19T05:52:59.229Z</updated>
+    <updated>2016-07-19T05:52:59.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>最近对<strong>Markdown</strong>很感兴趣，刚在Github上搭建了这个站点，用来记录平时的一些技巧心得。但是还有一些属于经常用到的，可以不断套用的东西，用现在这个站来记录的话，查找起来比较麻烦。因此，想找一款能直接<strong>Markdown</strong>记录，用树形结构组织，支持全文检索的Wiki软件。Github上搜了一圈，对比了几个Repo，最终选择<a href="1"><strong>Raneto</strong></a>。</p>
@@ -274,10 +274,10 @@
     <link href="http://sumw3.com/2014/07/20140709-3154ErrorOfSqlServer/"/>
     <id>http://sumw3.com/2014/07/20140709-3154ErrorOfSqlServer/</id>
     <published>2014-07-09T12:18:31.000Z</published>
-    <updated>2016-08-11T12:55:43.971Z</updated>
+    <updated>2017-04-24T06:29:27.904Z</updated>
     
     <content type="html"><![CDATA[<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>在<strong>SqlServer2005</strong>的<strong>Management studio</strong>里使用<code>bak</code>文件还原数据库的时候总是会发生下面的错误。</p>
-<p><img src="http://ww1.sinaimg.cn/large/68f944b2gw1f6q3o9np43j20jj0hlwi7.jpg" alt="SQL Server restore error"></p>
+<p><img src="https://ws1.sinaimg.cn/large/68f944b2gy1fexr1huuamj20jj0hlwi7.jpg" alt="SQL Server restore error"></p>
 <blockquote>
 <p>Restore failed for Server ‘ADANDELI’. (Microsoft.SqlServer.Smo)<br>An exception occurred while executing a Transact-SQL statement or batch.  (Microsoft.SqlServer.ConnectionInfo<br>The backup set holds a backup of a database other than the existing ‘AAA’ database.<br>RESTORE DATABASE is terminating abnormally. (Microsoft SQL Server，错误: 3154)</p>
 </blockquote>
@@ -295,7 +295,7 @@
     <summary type="html">
     
       &lt;h3 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h3&gt;&lt;p&gt;在&lt;strong&gt;SqlServer2005&lt;/strong&gt;的&lt;strong&gt;Management studio&lt;/strong&gt;里使用&lt;code&gt;bak&lt;/code&gt;文件还原数据库的时候总是会发生下面的错误。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/68f944b2gw1f6q3o9np43j20jj0hlwi7.jpg&quot; alt=&quot;SQL Server restore error&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://ws1.sinaimg.cn/large/68f944b2gy1fexr1huuamj20jj0hlwi7.jpg&quot; alt=&quot;SQL Server restore error&quot;&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Restore failed for Server ‘ADANDELI’. (Microsoft.SqlServer.Smo)&lt;br&gt;An exception occurred while executing a Transact-SQL statement or batch.  (Microsoft.SqlServer.ConnectionInfo&lt;br&gt;The backup set holds a backup of a database other than the existing ‘AAA’ database.&lt;br&gt;RESTORE DATABASE is terminating abnormally. (Microsoft SQL Server，错误: 3154)&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -316,7 +316,7 @@
     <link href="http://sumw3.com/2014/07/Hexo-started/"/>
     <id>http://sumw3.com/2014/07/Hexo-started/</id>
     <published>2014-07-08T02:23:38.000Z</published>
-    <updated>2016-08-12T05:15:47.074Z</updated>
+    <updated>2016-08-12T05:15:47.000Z</updated>
     
     <content type="html"><![CDATA[<p>原来网站是<strong>wordpress</strong>的，用的也是免费空间<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。</p>
 <blockquote>
