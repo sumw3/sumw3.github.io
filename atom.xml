@@ -85,7 +85,7 @@
     <link href="http://sumw3.com/2016/07/TravisCIAutoDeployHexo/"/>
     <id>http://sumw3.com/2016/07/TravisCIAutoDeployHexo/</id>
     <published>2016-07-21T05:21:38.000Z</published>
-    <updated>2016-07-21T05:55:04.000Z</updated>
+    <updated>2016-07-21T05:55:04.876Z</updated>
     
     <content type="html"><![CDATA[<h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>在开始之前，请先申请 Travis CI 帐号，把你的 GitHub repo 新增到 Travis CI 上，如果还没建立 <code>.travis.yml</code> 的话，请先制作一个新的 <code>.travis.yml</code> 。</p>
 <h2 id="Deploy-Key"><a href="#Deploy-Key" class="headerlink" title="Deploy Key"></a>Deploy Key</h2><p>首先你必须用 <code>ssh-keygen</code> 制作一个 SSH Key ，供 GitHub 当作 Deploy key 使用。</p>
@@ -203,7 +203,7 @@
     <link href="http://sumw3.com/2014/07/20140711-RanetoANodejsWiki/"/>
     <id>http://sumw3.com/2014/07/20140711-RanetoANodejsWiki/</id>
     <published>2014-07-11T06:30:02.000Z</published>
-    <updated>2016-07-19T05:52:59.000Z</updated>
+    <updated>2016-07-19T05:52:59.229Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>最近对<strong>Markdown</strong>很感兴趣，刚在Github上搭建了这个站点，用来记录平时的一些技巧心得。但是还有一些属于经常用到的，可以不断套用的东西，用现在这个站来记录的话，查找起来比较麻烦。因此，想找一款能直接<strong>Markdown</strong>记录，用树形结构组织，支持全文检索的Wiki软件。Github上搜了一圈，对比了几个Repo，最终选择<a href="1"><strong>Raneto</strong></a>。</p>
@@ -316,7 +316,7 @@
     <link href="http://sumw3.com/2014/07/Hexo-started/"/>
     <id>http://sumw3.com/2014/07/Hexo-started/</id>
     <published>2014-07-08T02:23:38.000Z</published>
-    <updated>2016-08-12T05:15:47.000Z</updated>
+    <updated>2016-08-12T05:15:47.074Z</updated>
     
     <content type="html"><![CDATA[<p>原来网站是<strong>wordpress</strong>的，用的也是免费空间<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。服务的稳定性还算不错，已经用了几年了，除了偶尔抽风down机之外，作为免费的空间来说还是很不错的。如果有同学要稳定的免费空间，推荐<a href="http://www.000webhost.com" target="_blank" rel="external"><strong>000webhost</strong></a>。</p>
 <blockquote>
